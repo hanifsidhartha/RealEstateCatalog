@@ -1,0 +1,49 @@
+body {
+  background-color: #e1f9f4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.main {
+  width: 550px;
+  height: auto;
+  border-radius: 10px;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.part-01 h2 {
+  color: #4c57b6;
+  font-family: Open Sans;
+  font-size: 40px;
+  font-weight: 400;
+}
+.part-02 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.part-02 h6 {
+  color: #000;
+  text-align: center;
+  font-family: Open Sans;
+  font-size: 15px;
+}
+.part-02 input {
+  width: 400px;
+  height: 40px;
+  border-radius: 5px;
+  border: 1px solid #e2e2e2;
+  margin-top: 20px;
+}
+.part-02 button {
+  margin-top: 20px;
+  width: 400px;
+  height: 40px;
+  background-color: #a8afec;
+}
