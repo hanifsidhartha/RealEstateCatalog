@@ -1,11 +1,12 @@
-import React from "react";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/Login.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
   const handleLogin = async () => {
     try {
       const response = await fetch("/login", {
@@ -20,6 +21,7 @@ const Login = () => {
         const data = await response.json();
         localStorage.setItem("token", data.token);
         console.log("Login successful");
+        navigate("/layout/home");
       } else {
         const data = await response.json();
         console.error("Login failed:", data.error);

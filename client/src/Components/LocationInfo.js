@@ -21,8 +21,45 @@ export default function LocationInfo() {
   };
 
   const handleSave = () => {
-    navigate("/layout/basicinfo");
+    const propertyData = {
+      email: formData.email,
+      city: formData.city,
+      area: formData.area,
+      pincode: formData.pincode,
+      address: formData.address,
+      landmark: formData.landmark,
+      latitude: formData.latitude,
+      longitude: formData.longitude,
+    };
+    fetch("/properties", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(propertyData),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          console.error(
+            "Network response was not ok:",
+            response.status,
+            response.statusText
+          );
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Property saved:", data);
+        alert("Property saved successfully!");
+        navigate("/layout/basicinfo");
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        alert("Failed to save property.");
+      });
   };
+
   const handleCancel = () => {
     navigate("/layout/general-info");
   };
@@ -127,7 +164,7 @@ export default function LocationInfo() {
         </div>
         <div className="form-buttons">
           <button onClick={handleCancel}>Previous</button>
-          <button onClick={handleSave}>Save & Continue</button>
+          <button onClick={handleSave}>Add Property</button>
         </div>
       </div>
     </div>
