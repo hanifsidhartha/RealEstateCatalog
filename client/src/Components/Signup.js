@@ -1,10 +1,15 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  // const [popupMessage, setPopupMessage] = useState("");
+  const navigate = useNavigate();
+
   const handleSignup = async () => {
     try {
       const response = await fetch("/signup", {
@@ -16,13 +21,19 @@ const Signup = () => {
       });
 
       if (response.ok) {
-        console.log("Signup successful");
+        setName(""); // Clear input fields
+        setEmail("");
+        setPassword("");
+        toast.success("Signup successful", { autoClose: 2000 });
+        setTimeout(() => {
+          navigate("/login");
+        }, 5000);
       } else {
         const data = await response.json();
-        console.error("Signup failed:", data.error);
+        toast.error(`Signup failed: ${data.error}`);
       }
     } catch (error) {
-      console.error("Error:", error);
+      toast.error(`Error: ${error.message}`);
     }
   };
   return (
@@ -58,6 +69,7 @@ const Signup = () => {
           <Link to="/login">Already have an account ? Sign In</Link>
         </h5>
       </div>
+      {/* {popupMessage && <div className="popup">{popupMessage}</div>} */}
     </div>
   );
 };
