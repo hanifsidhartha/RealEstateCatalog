@@ -4,8 +4,8 @@ import "../styles/Navbar.css";
 const Navbar = () => {
   return (
     <nav className="navbar">
-      {/* Add your navbar content here */}
-      <h2>Navbar</h2>
+      <div className="left-pane">USERID :06PD125</div>
+      <div className="right-pane">USERNAME</div>
     </nav>
   );
 };

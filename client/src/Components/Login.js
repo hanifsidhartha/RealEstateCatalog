@@ -6,6 +6,28 @@ import "../styles/Login.css";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const handleLogin = async () => {
+    try {
+      const response = await fetch("/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem("token", data.token);
+        console.log("Login successful");
+      } else {
+        const data = await response.json();
+        console.error("Login failed:", data.error);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   return (
     <div className="main">
@@ -26,7 +48,7 @@ const Login = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button className="">Login</button>
+        <button onClick={() => handleLogin()}>Login</button>
       </div>
       <div className="part-03">
         <h5>

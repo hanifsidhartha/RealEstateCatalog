@@ -2,6 +2,10 @@ import React from "react";
 import Login from "./Components/Login";
 import Signup from "./Components/Signup";
 import Home from "./Components/Home";
+import Basicinfo from "./Components/Basicinfo";
+import PropertyDetails from "./Components/PropertyDetails";
+import GeneraInfo from "./Components/GeneraInfo";
+import LocationInfo from "./Components/LocationInfo";
 import {
   BrowserRouter,
   Routes,
@@ -9,7 +13,7 @@ import {
   // useNavigate,
 } from "react-router-dom";
 import Layout from "./Components/Layout";
-// import "./App.css";
+import "./App.css";
 
 function App() {
   return (
@@ -20,6 +24,10 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/layout" element={<Layout />}>
             <Route path="home" element={<Home />} />
+            <Route path="basicinfo" element={<Basicinfo />} />
+            <Route path="property-detail" element={<PropertyDetails />} />
+            <Route path="general-info" element={<GeneraInfo />} />
+            <Route path="location-info" element={<LocationInfo />} />
           </Route>
         </Routes>
       </BrowserRouter>
