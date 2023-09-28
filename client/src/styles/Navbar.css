@@ -1,10 +1,20 @@
 .navbar {
-  background-color: #333;
+  background-color: #fafbfc;
   color: #fff;
   padding: 10px;
   position: fixed;
   top: 0;
-  left: 250px; /* Start after the width of the sidebar */
-  width: calc(100% - 250px); /* Calculate the width for the content area */
-  z-index: 1; /* Ensure the navbar is above the content */
+  left: 250px;
+  width: calc(100% - 250px);
+  z-index: 1;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100px;
+  box-sizing: border-box;
+}
+.navbar div {
+  color: black;
+  font-size: 15px;
+  font-weight: 400;
 }

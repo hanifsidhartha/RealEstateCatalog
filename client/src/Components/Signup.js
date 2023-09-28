@@ -5,6 +5,26 @@ const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const handleSignup = async () => {
+    try {
+      const response = await fetch("/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email, password }),
+      });
+
+      if (response.ok) {
+        console.log("Signup successful");
+      } else {
+        const data = await response.json();
+        console.error("Signup failed:", data.error);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
   return (
     <div className="main">
       <div className="part-01">
@@ -31,9 +51,7 @@ const Signup = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button className="btn waves-effect waves-light #64b5f6 blue darken-1">
-          Signup
-        </button>
+        <button onClick={() => handleSignup()}>Signup</button>
       </div>
       <div className="part-03">
         <h5>

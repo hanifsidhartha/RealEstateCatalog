@@ -1,74 +1,48 @@
 const express = require("express");
 const router = express.Router();
-const mongoose = require("mongoose");
-const User = mongoose.model("User");
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 const { JWT_SECRET } = require("../keys");
-const requirelogin = require("../middleware/requireLogin");
 
-router.post("/signup", (req, res) => {
-  const { name, email, password, pic } = req.body;
-  if (!name || !email || !password) {
-    return res.status(422).json({ error: "please add all the fields." });
-  }
-  User.findOne({ email: email })
-    .then((savedUser) => {
-      if (savedUser) {
-        return res
-          .status(422)
-          .json({ error: "user already exists with that email" });
-      }
-      bcrypt.hash(password, 12).then((hashedpassword) => {
-        const user = new User({
-          email,
-          password: hashedpassword,
-          name,
-          pic,
-        });
-        user
-          .save()
-          .then((user) => {
-            res.json({ message: "Saved Sucessfully." });
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      });
-    })
-    .catch((err) => {
-      console.log(err);
+router.post("/signup", async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ error: "Email already exists" });
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = new User({
+      name,
+      email,
+      password: hashedPassword,
     });
+    await user.save();
+    res.json({ message: "Signup successful" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
 });
 
-router.post("/signin", (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password) {
-    return res.status(422).json({ error: "please add email or password" });
-  }
-  User.findOne({ email: email }).then((savedUser) => {
-    if (!savedUser) {
-      return res.status(422).json({ error: "Invalid email or password" });
+router.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ error: "Invalid credentials" });
     }
-    bcrypt
-      .compare(password, savedUser.password)
-      .then((doMatch) => {
-        if (doMatch) {
-          //   res.json({ message: "succesfully signed in" });
-          const token = jwt.sign({ _id: savedUser._id }, JWT_SECRET);
-          const { _id, name, email, followers, following, pic } = savedUser;
-          res.json({
-            token,
-            user: { _id, name, email, followers, following, pic },
-          });
-        } else {
-          return res.status(422).json({ error: "Invalid email or password" });
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  });
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+    const token = jwt.sign({ userId: user._id }, JWT_SECRET);
+    res.json({ token });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
 });
 
 module.exports = router;

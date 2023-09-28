@@ -11,10 +11,10 @@
 }
 
 .logo {
+  color: #1a1b1c;
+  font-size: 30px;
   text-align: center;
   margin-bottom: 30px;
-  color: #000000;
-  font-weight: 700;
 }
 
 .menu {
@@ -24,24 +24,32 @@
 
 .menu li {
   margin-bottom: 15px;
+  padding-left: 30px;
 }
 
 .menu a {
   text-decoration: none;
-  color: #aaa;
+  color: black;
   font-size: 18px;
   padding: 10px;
-  display: block;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .menu-icon {
-  margin-right: 10px; /* Add spacing between the image and menu text */
+  margin-right: 20px; /* Add spacing between the image and menu text */
 }
 
 .menu a:hover {
-  background-color: #555;
+  /* background-color: #555; */
 }
 
 .active {
-  background-color: #555;
+  /* background-color: #555; */
+}
+
+img {
+  width: 24px;
+  height: 24px;
 }
