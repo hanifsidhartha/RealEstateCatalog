@@ -1,33 +1,52 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/Login.css";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
+const base_url = "https://02d02ba2-5227-46f2-b3d7-40fdc3a41bdc.mock.pstmn.io";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-
+  console.log(base_url);
   const handleLogin = async () => {
     try {
-      const response = await fetch("/login", {
+      const req_body = {
+        email: email,
+        password: password,
+      };
+
+      const response = await fetch(base_url + "/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(req_body),
       });
 
       if (response.ok) {
-        const data = await response.json();
-        localStorage.setItem("token", data.token);
-        console.log("Login successful");
-        navigate("/layout/home");
+        const response_data = await response.json();
+        console.log(response_data);
+        if (response_data.code == 200) {
+          localStorage.setItem("token", response_data.data.token);
+          localStorage.setItem("name", response_data.data.name);
+          console.log("Login successful");
+          navigate("/layout/home");
+          toast.success("Login successful");
+          setEmail("");
+          setPassword("");
+        } else {
+          toast.error("Login failed: " + response_data.message);
+        }
       } else {
-        const data = await response.json();
-        console.error("Login failed:", data.error);
+        const response_data = await response.json();
+        console.error("Login failed:", response_data.error);
+        toast.error("Login failed: " + response_data.error);
       }
     } catch (error) {
       console.error("Error:", error);
+      toast.error("Error: " + error.message);
     }
   };
 

@@ -6,13 +6,19 @@ const jwt = require("jsonwebtoken");
 const PORT = process.env.PORT || 5000;
 const { MONGOURI } = require("../server/keys");
 const app = express();
-mongoose
+
+const db = mongoose
   .connect(MONGOURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => console.log("MongoDB connected"))
+  .then(() => {
+    console.log("MongoDB connected");
+    return mongoose.connection;
+  })
   .catch((err) => console.error(err));
+
+console.log("asdf");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

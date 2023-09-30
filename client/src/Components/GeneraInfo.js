@@ -27,6 +27,7 @@ export default function GeneraInfo() {
   };
 
   const handleSave = () => {
+    localStorage.setItem("genralInfo", JSON.stringify(formData));
     navigate("/layout/location-info");
   };
   const handleCancel = () => {

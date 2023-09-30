@@ -6,6 +6,7 @@ const User = require("../models/User");
 const { JWT_SECRET } = require("../keys");
 
 router.post("/signup", async (req, res) => {
+  console.log("req");
   try {
     const { name, email, password } = req.body;
     const existingUser = await User.findOne({ email });
@@ -38,7 +39,7 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ error: "Invalid credentials" });
     }
     const token = jwt.sign({ userId: user._id }, JWT_SECRET);
-    res.json({ token });
+    res.json({ token, email });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Server error" });

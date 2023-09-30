@@ -1,9 +1,15 @@
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ProgressSteps from "../Components/ProgressSteps";
+const base_url = "https://02d02ba2-5227-46f2-b3d7-40fdc3a41bdc.mock.pstmn.io";
 
 export default function LocationInfo() {
   const navigate = useNavigate();
+  const basicInfo = localStorage.getItem("basicInfo");
+  const propertyDetails = localStorage.getItem("propertydetails");
+  const generalInfo = localStorage.getItem("generalInfo");
   const [formData, setFormData] = useState({
     email: "",
     city: "",
@@ -20,23 +26,24 @@ export default function LocationInfo() {
     setFormData({ ...formData, [name]: value });
   };
 
+  const parsedBasic = JSON.parse(basicInfo);
+  const parsedProperty = JSON.parse(propertyDetails);
+  const parsedgeneral = JSON.parse(generalInfo);
+
   const handleSave = () => {
-    const propertyData = {
-      email: formData.email,
-      city: formData.city,
-      area: formData.area,
-      pincode: formData.pincode,
-      address: formData.address,
-      landmark: formData.landmark,
-      latitude: formData.latitude,
-      longitude: formData.longitude,
+    const wholeData = {
+      ...parsedBasic,
+      ...parsedProperty,
+      ...parsedgeneral,
+      ...formData,
     };
-    fetch("/properties", {
+    console.log(wholeData);
+    fetch(base_url + "/add-property", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(propertyData),
+      body: JSON.stringify(wholeData),
     })
       .then((response) => {
         if (!response.ok) {
@@ -49,10 +56,16 @@ export default function LocationInfo() {
         }
         return response.json();
       })
-      .then((data) => {
-        console.log("Property saved:", data);
-        alert("Property saved successfully!");
-        navigate("/layout/basicinfo");
+      .then((response_data) => {
+        console.log("Property saved:", response_data);
+
+        if (response_data.code == 200) {
+          toast.success(response_data.message);
+          navigate("/layout/home");
+        } else {
+          toast.error(response_data.message);
+          navigate("/layout/basicinfo");
+        }
       })
       .catch((error) => {
         console.error("Error:", error);

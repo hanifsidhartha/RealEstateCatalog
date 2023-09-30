@@ -14,7 +14,7 @@
   color: #1a1b1c;
   font-size: 30px;
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 80px;
 }
 
 .menu {
@@ -42,11 +42,12 @@
 }
 
 .menu a:hover {
-  /* background-color: #555; */
+  color: "blue";
 }
 
 .active {
   /* background-color: #555; */
+  color: "blue";
 }
 
 img {

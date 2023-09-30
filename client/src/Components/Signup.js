@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+const base_url = "https://02d02ba2-5227-46f2-b3d7-40fdc3a41bdc.mock.pstmn.io";
+console.log(base_url);
 const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -12,7 +13,7 @@ const Signup = () => {
 
   const handleSignup = async () => {
     try {
-      const response = await fetch("/signup", {
+      const response = await fetch(base_url + "/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -21,13 +22,18 @@ const Signup = () => {
       });
 
       if (response.ok) {
-        setName(""); // Clear input fields
-        setEmail("");
-        setPassword("");
-        toast.success("Signup successful", { autoClose: 2000 });
-        setTimeout(() => {
-          navigate("/login");
-        }, 5000);
+        const data = await response.json();
+        if (data.code === 200) {
+          setName(""); // Clear input fields
+          setEmail("");
+          setPassword("");
+          toast.success("Signup successful", { autoClose: 2000 });
+          setTimeout(() => {
+            navigate("/login");
+          }, 5000);
+        } else {
+          toast.error(`Signup failed: ${data.message}`);
+        }
       } else {
         const data = await response.json();
         toast.error(`Signup failed: ${data.error}`);

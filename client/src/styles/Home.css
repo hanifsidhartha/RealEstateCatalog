@@ -61,3 +61,14 @@ body {
 .home-02 > div:last-child {
   border-right: none;
 }
+.action-button {
+  /* margin: 10px; */
+  background-color: none;
+  border: none;
+}
+.action-button img {
+  width: 10px;
+  height: 10px;
+  background-color: none;
+  border: none;
+}
