@@ -4,6 +4,10 @@ import propertyViews from "../images/Property_Views.svg";
 import sentInt from "../images/Sent_Interest.svg";
 import tarif from "../images/Tariff_Plan.svg";
 import ReceivedInt from "../images/Received_Interest.svg";
+import UserIcon from "../images/Group 25.svg";
+import Logout from "../images/logout.svg";
+import Edit from "../images/edit.svg";
+import Delete from "../images/delete.svg";
 
 const ImgUrl = {
   Assist,
@@ -12,6 +16,10 @@ const ImgUrl = {
   sentInt,
   tarif,
   ReceivedInt,
+  UserIcon,
+  Logout,
+  Edit,
+  Delete,
 };
 
 export default ImgUrl;

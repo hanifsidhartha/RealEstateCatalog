@@ -27,6 +27,7 @@ export default function GeneraInfo() {
   };
 
   const handleSave = () => {
+    localStorage.setItem("genralInfo", JSON.stringify(formData));
     navigate("/layout/location-info");
   };
   const handleCancel = () => {
@@ -110,6 +111,7 @@ export default function GeneraInfo() {
               value={formData.mobile}
               placeholder="Enter Mobile Number"
               onChange={handleChange}
+              required
             />
             <label htmlFor="saleType">Sale Type</label>
             <select

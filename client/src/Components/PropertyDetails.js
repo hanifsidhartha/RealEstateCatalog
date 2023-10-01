@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ProgressSteps from "../Components/ProgressSteps";
@@ -23,11 +23,17 @@ export default function PropertyDetails() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    // console.log(formData);
   };
+
+  useEffect(() => {
+    console.log(formData);
+  }, [formData]);
 
   const navigate = useNavigate();
 
   const handleSave = () => {
+    localStorage.setItem("propertydetails", JSON.stringify(formData));
     navigate("/layout/general-info");
   };
 
@@ -44,7 +50,7 @@ export default function PropertyDetails() {
             <label htmlFor="length">Length</label>
             <input
               type="text"
-              id="length"
+              // id="length"
               name="length"
               value={formData.length}
               placeholder="Example: 1000"

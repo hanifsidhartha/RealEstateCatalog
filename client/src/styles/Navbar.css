@@ -17,4 +17,11 @@
   color: black;
   font-size: 15px;
   font-weight: 400;
+  margin: 10px;
+}
+.right-pane {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
 }

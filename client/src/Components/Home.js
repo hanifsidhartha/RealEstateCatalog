@@ -1,66 +1,82 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ImgUrl from "../assets/images/ImgUrl";
 
 import "../styles/Home.css";
+import { toast } from "react-toastify";
 
 const Home = () => {
-  // const MockData = [
-  //   {
-  //     ppdId: "PPD1125",
-  //     propertyType: "Plot",
-  //     contact: "97852 52525",
-  //     area: "1200",
-  //     views: "02",
-  //     status: "Sold",
-  //     daysLeft: "00",
-  //   },
-  //   {
-  //     ppdId: "PPD1202",
-  //     propertyType: "House",
-  //     contact: "97852 52525",
-  //     area: "2500",
-  //     views: "02",
-  //     status: "Unsold",
-  //     daysLeft: "35",
-  //   },
-  //   {
-  //     ppdId: "PPD1235",
-  //     propertyType: "House",
-  //     contact: "97852 52525",
-  //     area: "1800",
-  //     views: "05",
-  //     status: "Unsold",
-  //     daysLeft: "12",
-  //   },
-  //   {
-  //     ppdId: "PPD1278",
-  //     propertyType: "House",
-  //     contact: "97852 52525",
-  //     area: "800",
-  //     views: "03",
-  //     status: "Unsold",
-  //     daysLeft: "23",
-  //   },
-  //   {
-  //     ppdId: "PPD1311",
-  //     propertyType: "Flat",
-  //     contact: "97852 52525",
-  //     area: "2000",
-  //     views: "10",
-  //     status: "Sold",
-  //     daysLeft: "00",
-  //   },
-  //   {
-  //     ppdId: "PPD1323",
-  //     propertyType: "House",
-  //     contact: "97852 52525",
-  //     area: "1250",
-  //     views: "02",
-  //     status: "Unsold",
-  //     daysLeft: "02",
-  //   },
-  // ];
   const navigate = useNavigate();
+  const [data, setData] = useState([]);
+  console.log(data, "data");
+  const token = localStorage.getItem("token");
+
+  const deleteRequestOptions = {
+    method: "DELETE",
+    headers: { Authorization: token, "Content-Type": "application/json" },
+  };
+
+  useEffect(() => {
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`, // Include the authorization token
+        "Content-Type": "application/json",
+      },
+    };
+    // const deleteRequestOptions = {
+    //   method: "DELETE",
+    //   headers: { Authorization: authToken, "Content-Type": "application/json" },
+    // };
+
+    // Make a GET request using the fetch API
+    fetch("http://localhost:5001/list-properties", requestOptions)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((responseData) => {
+        // Set the fetched data in the state
+        setData(responseData);
+      })
+      .catch((fetchError) => {
+        // Handle any errors that occurred during the fetch
+        toast.error(fetchError);
+      });
+  }, []);
+
+  // delete record
+
+  const handleDelete = (id) => {
+    console.log("delete data", id);
+
+    fetch("http://localhost:5001/delete-property", {
+      ...deleteRequestOptions,
+      body: JSON.stringify({
+        property_id: id,
+      }),
+    })
+      .then((resp) => {
+        if (!resp.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return resp.json();
+      })
+      .then((responseData) => {
+        // Set the fetched data in the state
+        setData(responseData);
+      })
+      .catch((fetchError) => {
+        // Handle any errors that occurred during the fetch
+        toast.error(fetchError);
+      });
+  };
+
+  const handleEditData = (id) => {
+    console.log("im edit", id);
+  };
 
   return (
     <>
@@ -89,19 +105,32 @@ const Home = () => {
           <div className="heading">Days Left</div>
           <div className="heading">Action</div>
         </div>
-        {/* {MockData.map((data, index) => (
+        {data?.data?.map((data, index) => (
           <div key={index} className="home-02">
-            <div>{data.ppdId}</div>
+            <div>{data.ppp_id}</div>
             <div>Add image here</div>
-            <div>{data.propertyType}</div>
+            <div>{data.property_type}</div>
             <div>{data.contact}</div>
             <div>{data.area}</div>
             <div>{data.views}</div>
             <div>{data.status}</div>
-            <div>{data.daysLeft}</div>
-            <div>Add action button here</div>
+            <div>{data.days_left}</div>
+            <div>
+              <button
+                className="action-button"
+                onClick={() => handleEditData(data)}
+              >
+                <img src={ImgUrl?.Edit} alt="pic missing" />
+              </button>
+              <button
+                className="action-button"
+                onClick={() => handleDelete(data.ppp_id)}
+              >
+                <img src={ImgUrl?.Delete} alt="pic missing" />
+              </button>
+            </div>
           </div>
-        ))} */}
+        ))}
       </div>
     </>
   );

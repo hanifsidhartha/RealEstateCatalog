@@ -1,9 +1,14 @@
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ProgressSteps from "../Components/ProgressSteps";
 
 export default function LocationInfo() {
   const navigate = useNavigate();
+  const basicInfo = localStorage.getItem("basicInfo");
+  const propertyDetails = localStorage.getItem("propertydetails");
+  const generalInfo = localStorage.getItem("generalInfo");
   const [formData, setFormData] = useState({
     email: "",
     city: "",
@@ -20,23 +25,28 @@ export default function LocationInfo() {
     setFormData({ ...formData, [name]: value });
   };
 
+  const parsedBasic = JSON.parse(basicInfo);
+  const parsedProperty = JSON.parse(propertyDetails);
+  const parsedgeneral = JSON.parse(generalInfo);
+
   const handleSave = () => {
-    const propertyData = {
-      email: formData.email,
-      city: formData.city,
-      area: formData.area,
-      pincode: formData.pincode,
-      address: formData.address,
-      landmark: formData.landmark,
-      latitude: formData.latitude,
-      longitude: formData.longitude,
+    navigate("/layout/home");
+    const wholeData = {
+      ...parsedBasic,
+      ...parsedProperty,
+      ...parsedgeneral,
+      ...formData,
     };
-    fetch("/properties", {
+    console.log("Request Data:", wholeData); // Log the request data
+    const token = localStorage.getItem("token");
+
+    fetch("http://localhost:5001/add-property", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // Include the authorization token
       },
-      body: JSON.stringify(propertyData),
+      body: JSON.stringify(wholeData),
     })
       .then((response) => {
         if (!response.ok) {
@@ -49,14 +59,21 @@ export default function LocationInfo() {
         }
         return response.json();
       })
-      .then((data) => {
-        console.log("Property saved:", data);
-        alert("Property saved successfully!");
-        navigate("/layout/basicinfo");
+      .then((response_data) => {
+        console.log("Response from server:", response_data);
+
+        if (response_data.code === 200) {
+          toast.success(response_data.message);
+          navigate("/layout/home");
+        } else {
+          toast.error(response_data.message);
+          navigate("/layout/basicinfo");
+        }
       })
       .catch((error) => {
         console.error("Error:", error);
         alert("Failed to save property.");
+        return;
       });
   };
 
@@ -86,6 +103,7 @@ export default function LocationInfo() {
               name="area"
               value={formData.area}
               onChange={handleChange}
+              required
             >
               <option value="">Select Area</option>
               <option value="Area1">Area1</option>

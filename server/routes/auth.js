@@ -5,43 +5,87 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const { JWT_SECRET } = require("../keys");
 
+function gen_res(code, message, data) {
+  var resp = {
+    code: code,
+    message: message,
+    data: data,
+  };
+  return resp;
+}
+
 router.post("/signup", async (req, res) => {
+  console.log("req");
   try {
     const { name, email, password } = req.body;
+
+    // Check if email and password are provided
+    if (!email || !password || !name) {
+      return res
+        .status(200)
+        .json(gen_res(401, "Email and password and name are required", {}));
+    }
+
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ error: "Email already exists" });
+      return res.status(200).json(gen_res(400, "Email already exists", {}));
     }
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // const hashedPassword = await bcrypt.hash(password, 10);
     const user = new User({
       name,
       email,
-      password: hashedPassword,
+      password: password,
     });
     await user.save();
-    res.json({ message: "Signup successful" });
+
+    return res.status(200).json(gen_res(200, "success", {}));
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Server error" });
+    res.status(200).json({ error: "Server error" });
   }
 });
 
 router.post("/login", async (req, res) => {
   try {
+    // Check for an empty request body
+    if (!req.body || Object.keys(req.body).length === 0) {
+      return res.status(200).json(gen_res(200, "Invalid request", {}));
+    }
+
     const { email, password } = req.body;
+
+    // Check if email and password are provided
+    if (!email || !password) {
+      return res
+        .status(200)
+        .json(gen_res(401, "Email and password are required", {}));
+    }
+
+    // Find the user by email
     const user = await User.findOne({ email });
+
     if (!user) {
-      return res.status(401).json({ error: "Invalid credentials" });
+      return res.status(402).json(gen_res(402, "Invalid credentials", {}));
     }
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    // Check if the password is valid
+    const isPasswordValid = (password, user.password);
+
     if (!isPasswordValid) {
-      return res.status(401).json({ error: "Invalid credentials" });
+      return res.status(402).json(gen_res(402, "Invasdfalid credentials", {}));
     }
-    const token = jwt.sign({ userId: user._id }, JWT_SECRET);
-    res.json({ token });
+
+    // Generate and send a JWT token
+    const token = jwt.sign({ email: email }, JWT_SECRET);
+    const cus_data = {
+      token: token,
+      name: user.name,
+    };
+
+    return res.status(200).json(gen_res(200, "success", cus_data));
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Server error" });
+    return res.status(200).json({ error: "Server error" });
   }
 });
 

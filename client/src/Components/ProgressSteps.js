@@ -1,6 +1,7 @@
 // ProgressSteps.js
 import React from "react";
 import { useLocation } from "react-router-dom";
+import "../styles/Signup.css";
 
 const steps = [
   { path: "/layout/basicinfo", label: "Basic Info" },
@@ -45,20 +46,22 @@ const ProgressSteps = () => {
   };
 
   return (
-    <div className="progress-steps" style={{ display: "flex" }}>
-      {steps.map((step, index) => (
-        <div key={index} style={stepContainerStyle}>
-          <div
-            style={
-              location.pathname === step.path ? activeStepStyle : stepStyle
-            }
-            className={`step ${index <= currentStep ? "active" : ""}`}
-          >
-            {index + 1}
+    <div className="ps">
+      <div className="progress-steps" style={{ display: "flex" }}>
+        {steps.map((step, index) => (
+          <div key={index} style={stepContainerStyle}>
+            <div
+              style={
+                location.pathname === step.path ? activeStepStyle : stepStyle
+              }
+              className={`step ${index <= currentStep ? "active" : ""}`}
+            >
+              {index + 1}
+            </div>
+            <span>{step.label}</span>
           </div>
-          <span>{step.label}</span>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };

@@ -1,3 +1,12 @@
 body {
   background-color: #e1f9f4;
 }
+.ps {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 30px;
+  background-color: #ffffff;
+  padding: 20px;
+  margin: 20px;
+}
