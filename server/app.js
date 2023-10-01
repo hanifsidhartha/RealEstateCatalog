@@ -3,7 +3,9 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const jwt = require("jsonwebtoken");
-const PORT = process.env.PORT || 5000;
+require("dotenv").config();
+
+const PORT = process.env.PORT;
 const { MONGOURI } = require("../server/keys");
 const app = express();
 
@@ -24,26 +26,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 
-// const verifyToken = (req, res, next) => {
-//   const token = req.headers.authorization;
-
-//   if (!token) {
-//     return res.status(401).json({ error: "Unauthorized" });
-//   }
-
-//   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-//     if (err) {
-//       return res.status(401).json({ error: "Invalid token" });
-//     }
-//     req.userId = decoded.userId; // Store the user ID in the request object
-//     next();
-//   });
-// };
-
-// app.use((err, req, res, next) => {
-//   console.error(err.stack);
-//   res.status(500).json({ error: "Something went wrong!" });
-// });
+// Middleware to pass the db variable
+app.use((req, res, next) => {
+  req.db = db; // Assuming that 'db' is your database connection
+  next(); // Move on to the next middleware or route handler
+});
 
 require("./models/User");
 require("./models/Property");

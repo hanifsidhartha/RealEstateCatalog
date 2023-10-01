@@ -4,23 +4,23 @@ import "../styles/Login.css";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const base_url = "https://02d02ba2-5227-46f2-b3d7-40fdc3a41bdc.mock.pstmn.io";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  console.log(base_url);
   const handleLogin = async () => {
     try {
       const req_body = {
         email: email,
         password: password,
       };
+      const token = localStorage.getItem("token"); // Retrieve the token from storage
 
-      const response = await fetch(base_url + "/login", {
+      const response = await fetch("http://localhost:5001/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(req_body),
       });

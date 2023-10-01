@@ -3,7 +3,6 @@ import "react-toastify/dist/ReactToastify.css";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ProgressSteps from "../Components/ProgressSteps";
-const base_url = "https://02d02ba2-5227-46f2-b3d7-40fdc3a41bdc.mock.pstmn.io";
 
 export default function LocationInfo() {
   const navigate = useNavigate();
@@ -31,17 +30,21 @@ export default function LocationInfo() {
   const parsedgeneral = JSON.parse(generalInfo);
 
   const handleSave = () => {
+    navigate("/layout/home");
     const wholeData = {
       ...parsedBasic,
       ...parsedProperty,
       ...parsedgeneral,
       ...formData,
     };
-    console.log(wholeData);
-    fetch(base_url + "/add-property", {
+    console.log("Request Data:", wholeData); // Log the request data
+    const token = localStorage.getItem("token");
+
+    fetch("http://localhost:5001/add-property", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // Include the authorization token
       },
       body: JSON.stringify(wholeData),
     })
@@ -57,9 +60,9 @@ export default function LocationInfo() {
         return response.json();
       })
       .then((response_data) => {
-        console.log("Property saved:", response_data);
+        console.log("Response from server:", response_data);
 
-        if (response_data.code == 200) {
+        if (response_data.code === 200) {
           toast.success(response_data.message);
           navigate("/layout/home");
         } else {
@@ -70,6 +73,7 @@ export default function LocationInfo() {
       .catch((error) => {
         console.error("Error:", error);
         alert("Failed to save property.");
+        return;
       });
   };
 
@@ -99,6 +103,7 @@ export default function LocationInfo() {
               name="area"
               value={formData.area}
               onChange={handleChange}
+              required
             >
               <option value="">Select Area</option>
               <option value="Area1">Area1</option>

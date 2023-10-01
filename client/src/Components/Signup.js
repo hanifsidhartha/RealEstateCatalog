@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-const base_url = "https://02d02ba2-5227-46f2-b3d7-40fdc3a41bdc.mock.pstmn.io";
-console.log(base_url);
 const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -13,7 +11,7 @@ const Signup = () => {
 
   const handleSignup = async () => {
     try {
-      const response = await fetch(base_url + "/signup", {
+      const response = await fetch("http://localhost:5001/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

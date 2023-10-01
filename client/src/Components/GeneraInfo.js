@@ -111,6 +111,7 @@ export default function GeneraInfo() {
               value={formData.mobile}
               placeholder="Enter Mobile Number"
               onChange={handleChange}
+              required
             />
             <label htmlFor="saleType">Sale Type</label>
             <select
