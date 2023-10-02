@@ -44,6 +44,7 @@ const Login = () => {
         if (response_data.code == 200) {
           localStorage.setItem("token", response_data.data.token);
           localStorage.setItem("name", response_data.data.name);
+          localStorage.setItem("email", response_data.data.email);
           console.log("Login successful");
           navigate("/layout/home");
           toast.success("Login successful");
@@ -72,7 +73,7 @@ const Login = () => {
         <h6>Enter your credentials to access your account</h6>
         <input
           type="text"
-          placeholder="User ID"
+          placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
