@@ -9,18 +9,31 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const handleLogin = async () => {
+    if (!email.trim()) {
+      toast.error("Email is required");
+      return;
+    }
+
+    if (!/^\S+@\S+\.\S+$/.test(email)) {
+      toast.error("Invalid email format");
+      return;
+    }
+
+    if (!password.trim()) {
+      toast.error("Password is required");
+      return;
+    }
+
     try {
       const req_body = {
         email: email,
         password: password,
       };
-      const token = localStorage.getItem("token"); // Retrieve the token from storage
 
       const response = await fetch("http://localhost:5001/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(req_body),
       });

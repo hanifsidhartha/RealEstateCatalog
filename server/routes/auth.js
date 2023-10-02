@@ -28,20 +28,20 @@ router.post("/signup", async (req, res) => {
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(200).json(gen_res(400, "Email already exists", {}));
+      return res.status(400).json(gen_res(400, "Email already exists", {}));
     }
-    // const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
     const user = new User({
       name,
       email,
-      password: password,
+      password: hashedPassword,
     });
     await user.save();
 
     return res.status(200).json(gen_res(200, "success", {}));
   } catch (error) {
     console.error(error);
-    res.status(200).json({ error: "Server error" });
+    res.status(500).json({ error: "Server error" });
   }
 });
 
@@ -69,10 +69,10 @@ router.post("/login", async (req, res) => {
     }
 
     // Check if the password is valid
-    const isPasswordValid = (password, user.password);
+    const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      return res.status(402).json(gen_res(402, "Invasdfalid credentials", {}));
+      return res.status(402).json(gen_res(402, "Invalid credentials", {}));
     }
 
     // Generate and send a JWT token

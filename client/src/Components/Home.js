@@ -6,28 +6,74 @@ import "../styles/Home.css";
 import { toast } from "react-toastify";
 
 const Home = () => {
+  // const MockData = [
+  //   {
+  //     ppdId: "PPD1125",
+  //     propertyType: "Plot",
+  //     contact: "97852 52525",
+  //     area: "1200",
+  //     views: "02",
+  //     status: "Sold",
+  //     daysLeft: "00",
+  //   },
+  //   {
+  //     ppdId: "PPD1202",
+  //     propertyType: "House",
+  //     contact: "97852 52525",
+  //     area: "2500",
+  //     views: "02",
+  //     status: "Unsold",
+  //     daysLeft: "35",
+  //   },
+  //   {
+  //     ppdId: "PPD1235",
+  //     propertyType: "House",
+  //     contact: "97852 52525",
+  //     area: "1800",
+  //     views: "05",
+  //     status: "Unsold",
+  //     daysLeft: "12",
+  //   },
+  //   {
+  //     ppdId: "PPD1278",
+  //     propertyType: "House",
+  //     contact: "97852 52525",
+  //     area: "800",
+  //     views: "03",
+  //     status: "Unsold",
+  //     daysLeft: "23",
+  //   },
+  //   {
+  //     ppdId: "PPD1311",
+  //     propertyType: "Flat",
+  //     contact: "97852 52525",
+  //     area: "2000",
+  //     views: "10",
+  //     status: "Sold",
+  //     daysLeft: "00",
+  //   },
+  //   {
+  //     ppdId: "PPD1323",
+  //     propertyType: "House",
+  //     contact: "97852 52525",
+  //     area: "1250",
+  //     views: "02",
+  //     status: "Unsold",
+  //     daysLeft: "02",
+  //   },
+  // ];
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   console.log(data, "data");
   const token = localStorage.getItem("token");
-
-  const deleteRequestOptions = {
-    method: "DELETE",
-    headers: { Authorization: token, "Content-Type": "application/json" },
-  };
-
   useEffect(() => {
     const requestOptions = {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${token}`, // Include the authorization token
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     };
-    // const deleteRequestOptions = {
-    //   method: "DELETE",
-    //   headers: { Authorization: authToken, "Content-Type": "application/json" },
-    // };
 
     // Make a GET request using the fetch API
     fetch("http://localhost:5001/list-properties", requestOptions)
@@ -52,12 +98,18 @@ const Home = () => {
   const handleDelete = (id) => {
     console.log("delete data", id);
 
-    fetch("http://localhost:5001/delete-property", {
-      ...deleteRequestOptions,
+    const deleteRequestOptions = {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
         property_id: id,
       }),
-    })
+    };
+
+    fetch("http://localhost:5001/delete-property", deleteRequestOptions)
       .then((resp) => {
         if (!resp.ok) {
           throw new Error("Network response was not ok");
@@ -66,11 +118,19 @@ const Home = () => {
       })
       .then((responseData) => {
         // Set the fetched data in the state
-        setData(responseData);
+        if (
+          responseData.code === 200 &&
+          responseData.message === "Property ID is required"
+        ) {
+          // Handle the error here, e.g., display it to the user
+          toast.error("Property ID is required");
+        } else {
+          setData(responseData);
+        }
       })
       .catch((fetchError) => {
         // Handle any errors that occurred during the fetch
-        toast.error(fetchError);
+        toast.error(fetchError.message);
       });
   };
 
