@@ -131,7 +131,7 @@ router.post("/list-properties", verifyToken, async (req, res) => {
 });
 
 // Define the /delete-property route
-router.post("/delete-property", async (req, res) => {
+router.delete("/delete-property", async (req, res) => {
   try {
     const authHeader = req.headers.authorization;
 

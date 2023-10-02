@@ -63,9 +63,11 @@ export default function LocationInfo() {
         console.log("Response from server:", response_data);
 
         if (response_data.code === 200) {
+          // console.log("Success: Redirecting to /layout/home");
           toast.success(response_data.message);
           navigate("/layout/home");
         } else {
+          // console.log("Error: Redirecting to /layout/basicinfo");
           toast.error(response_data.message);
           navigate("/layout/basicinfo");
         }

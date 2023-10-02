@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/Basicinfo.css"; // Import your custom CSS for styling
+import "../styles/Basicinfo.css";
 import ProgressSteps from "../Components/ProgressSteps";
 
 export default function GeneraInfo() {
