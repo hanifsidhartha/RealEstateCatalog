@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import ImgUrl from "../assets/images/ImgUrl";
 
@@ -6,66 +6,11 @@ import "../styles/Home.css";
 import { toast } from "react-toastify";
 
 const Home = () => {
-  // const MockData = [
-  //   {
-  //     ppdId: "PPD1125",
-  //     propertyType: "Plot",
-  //     contact: "97852 52525",
-  //     area: "1200",
-  //     views: "02",
-  //     status: "Sold",
-  //     daysLeft: "00",
-  //   },
-  //   {
-  //     ppdId: "PPD1202",
-  //     propertyType: "House",
-  //     contact: "97852 52525",
-  //     area: "2500",
-  //     views: "02",
-  //     status: "Unsold",
-  //     daysLeft: "35",
-  //   },
-  //   {
-  //     ppdId: "PPD1235",
-  //     propertyType: "House",
-  //     contact: "97852 52525",
-  //     area: "1800",
-  //     views: "05",
-  //     status: "Unsold",
-  //     daysLeft: "12",
-  //   },
-  //   {
-  //     ppdId: "PPD1278",
-  //     propertyType: "House",
-  //     contact: "97852 52525",
-  //     area: "800",
-  //     views: "03",
-  //     status: "Unsold",
-  //     daysLeft: "23",
-  //   },
-  //   {
-  //     ppdId: "PPD1311",
-  //     propertyType: "Flat",
-  //     contact: "97852 52525",
-  //     area: "2000",
-  //     views: "10",
-  //     status: "Sold",
-  //     daysLeft: "00",
-  //   },
-  //   {
-  //     ppdId: "PPD1323",
-  //     propertyType: "House",
-  //     contact: "97852 52525",
-  //     area: "1250",
-  //     views: "02",
-  //     status: "Unsold",
-  //     daysLeft: "02",
-  //   },
-  // ];
   const navigate = useNavigate();
   const [data, setData] = useState([]);
-  console.log(data, "data");
   const token = localStorage.getItem("token");
+  const ppdCounter = useRef(1125);
+
   useEffect(() => {
     const requestOptions = {
       method: "POST",
@@ -86,12 +31,14 @@ const Home = () => {
       .then((responseData) => {
         // Set the fetched data in the state
         setData(responseData);
+        // Initialize the counter with your starting value
+        // setPpdCounter(1125);
       })
       .catch((fetchError) => {
         // Handle any errors that occurred during the fetch
         toast.error(fetchError);
       });
-  }, []);
+  }, [token]);
 
   // delete record
 
@@ -137,6 +84,11 @@ const Home = () => {
   const handleEditData = (id) => {
     console.log("im edit", id);
   };
+  const generateNextPPDId = () => {
+    const nextPPDId = `PPD${ppdCounter.current}`;
+    ppdCounter.current += 1; // Increment the counter for the next ID
+    return nextPPDId;
+  };
 
   return (
     <>
@@ -167,7 +119,7 @@ const Home = () => {
         </div>
         {data?.data?.map((data, index) => (
           <div key={index} className="home-02">
-            <div>{data.ppp_id}</div>
+            <div>{generateNextPPDId()}</div>
             <div>Add image here</div>
             <div>{data.property_type}</div>
             <div>{data.contact}</div>

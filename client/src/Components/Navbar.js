@@ -5,6 +5,8 @@ import ImgUrl from "../assets/images/ImgUrl";
 
 const Navbar = () => {
   const userName = localStorage.getItem("name");
+  const userEmail = localStorage.getItem("email");
+
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.clear();
@@ -12,7 +14,7 @@ const Navbar = () => {
   };
   return (
     <nav className="navbar">
-      <div className="left-pane">USERID :06PD125</div>
+      <div className="left-pane">Email ID: {userEmail || ""}</div>
       <div className="right-pane" style={{}}>
         <div>
           <img src={ImgUrl.UserIcon} alt="pic misssing" />
