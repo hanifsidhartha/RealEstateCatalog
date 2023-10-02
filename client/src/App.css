@@ -15,7 +15,17 @@ body {
 
 .content {
   flex-grow: 1;
-  padding: 20px;
-  background-color: #f0f0f0;
+  /* padding: 20px; */
+  background-color: #fafbfc;
   margin-left: 250px; /* Match the width of the sidebar */
+  width: calc(100% - 250px);
+  width: calc(100vw- 250px);
+}
+.layout {
+  width: 100vw;
+  height: 100vh;
+}
+.main-content {
+  margin-top: 100px;
+  padding: 2rem;
 }

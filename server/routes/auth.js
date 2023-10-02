@@ -1,74 +1,92 @@
 const express = require("express");
 const router = express.Router();
-const mongoose = require("mongoose");
-const User = mongoose.model("User");
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 const { JWT_SECRET } = require("../keys");
-const requirelogin = require("../middleware/requireLogin");
 
-router.post("/signup", (req, res) => {
-  const { name, email, password, pic } = req.body;
-  if (!name || !email || !password) {
-    return res.status(422).json({ error: "please add all the fields." });
-  }
-  User.findOne({ email: email })
-    .then((savedUser) => {
-      if (savedUser) {
-        return res
-          .status(422)
-          .json({ error: "user already exists with that email" });
-      }
-      bcrypt.hash(password, 12).then((hashedpassword) => {
-        const user = new User({
-          email,
-          password: hashedpassword,
-          name,
-          pic,
-        });
-        user
-          .save()
-          .then((user) => {
-            res.json({ message: "Saved Sucessfully." });
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      });
-    })
-    .catch((err) => {
-      console.log(err);
+function gen_res(code, message, data) {
+  var resp = {
+    code: code,
+    message: message,
+    data: data,
+  };
+  return resp;
+}
+
+router.post("/signup", async (req, res) => {
+  console.log("req");
+  try {
+    const { name, email, password } = req.body;
+
+    // Check if email and password are provided
+    if (!email || !password || !name) {
+      return res
+        .status(200)
+        .json(gen_res(401, "Email and password and name are required", {}));
+    }
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json(gen_res(400, "Email already exists", {}));
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = new User({
+      name,
+      email,
+      password: hashedPassword,
     });
+    await user.save();
+
+    return res.status(200).json(gen_res(200, "success", {}));
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
 });
 
-router.post("/signin", (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password) {
-    return res.status(422).json({ error: "please add email or password" });
-  }
-  User.findOne({ email: email }).then((savedUser) => {
-    if (!savedUser) {
-      return res.status(422).json({ error: "Invalid email or password" });
+router.post("/login", async (req, res) => {
+  try {
+    // Check for an empty request body
+    if (!req.body || Object.keys(req.body).length === 0) {
+      return res.status(200).json(gen_res(200, "Invalid request", {}));
     }
-    bcrypt
-      .compare(password, savedUser.password)
-      .then((doMatch) => {
-        if (doMatch) {
-          //   res.json({ message: "succesfully signed in" });
-          const token = jwt.sign({ _id: savedUser._id }, JWT_SECRET);
-          const { _id, name, email, followers, following, pic } = savedUser;
-          res.json({
-            token,
-            user: { _id, name, email, followers, following, pic },
-          });
-        } else {
-          return res.status(422).json({ error: "Invalid email or password" });
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  });
+
+    const { email, password } = req.body;
+
+    // Check if email and password are provided
+    if (!email || !password) {
+      return res
+        .status(200)
+        .json(gen_res(401, "Email and password are required", {}));
+    }
+
+    // Find the user by email
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(402).json(gen_res(402, "Invalid credentials", {}));
+    }
+
+    // Check if the password is valid
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      return res.status(402).json(gen_res(402, "Invalid credentials", {}));
+    }
+
+    // Generate and send a JWT token
+    const token = jwt.sign({ email: email }, JWT_SECRET);
+    const cus_data = {
+      token: token,
+      name: user.name,
+    };
+
+    return res.status(200).json(gen_res(200, "success", cus_data));
+  } catch (error) {
+    console.error(error);
+    return res.status(200).json({ error: "Server error" });
+  }
 });
 
 module.exports = router;

@@ -1,7 +1,6 @@
-<<<<<<< HEAD
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/Basicinfo.css"; // Import your custom CSS for styling
+import "../styles/Basicinfo.css";
 import ProgressSteps from "../Components/ProgressSteps";
 
 export default function GeneraInfo() {
@@ -28,6 +27,7 @@ export default function GeneraInfo() {
   };
 
   const handleSave = () => {
+    localStorage.setItem("genralInfo", JSON.stringify(formData));
     navigate("/layout/location-info");
   };
   const handleCancel = () => {
@@ -111,6 +111,7 @@ export default function GeneraInfo() {
               value={formData.mobile}
               placeholder="Enter Mobile Number"
               onChange={handleChange}
+              required
             />
             <label htmlFor="saleType">Sale Type</label>
             <select
@@ -144,92 +145,3 @@ export default function GeneraInfo() {
     </div>
   );
 }
-=======
-import React from 'react'
-//import ImgUrl from '../assets/images/ImgUrl'
-
-const generalinfo = () => {
-  return (
-    <div className='container'>
-      
-      <div className="header">
-            <div><span>ADD New Property</span></div>
-            <div className='headbuttons'>
-                <button>BasicInfo</button>
-                <button>PropertyDetail</button>
-                <button>GeneralInfo</button>
-                <button>LocationInfo</button>
-            </div>
-        </div>
-
-        <div className='body'>
-            <div className='name' placeholder='owner'>
-                <span>Name</span>
-                <select>
-                    <option>owner1</option>
-                    <option>owner2</option>
-                    <option>owner3</option>
-                </select>
-             </div>
-
-             <div className='number'>
-                <span>Pincode</span>
-                <input type='number' placeholder='number' />
-            </div>
-
-            <div className='postedby' placeholder='postedby'>
-                <span>PostedBy</span>
-                <select>
-                    <option>post1</option>
-                    <option>post2</option>
-                    <option>post3</option>
-                </select>
-             </div>
-
-             <div className='saletype' placeholder='SaleType'>
-                <span>SaleType</span>
-                <select>
-                    <option>type1</option>
-                    <option>type22</option>
-                    <option>type3</option>
-                </select>
-             </div>
-
-             <div className='featuredpackage' placeholder='featuredPakage' >
-                <span>featuredPakage</span>
-                <select>
-                    <option>package1</option>
-                    <option>package2</option>
-                    <option>package3</option>
-                </select>
-             </div>
-
-             <div className='ppd' placeholder='ppd'>
-                <span>PPD</span>
-                <select>
-                    <option>ppd1</option>
-                    <option>ppd2</option>
-                    <option>ppd3</option>
-                </select>
-             </div>
-
-             <div className='addimg'>
-              //  <img src={imglogo} /><span>AddImage</span>
-             </div> 
-
-
-         </div>
-
-
-       
-
-        <div className='footer'>
-            <button>Previous</button>
-            <button>Save&Continue</button>
-        </div>
-    </div>
-  )
-}
-
-export default generalinfo
->>>>>>> f99e86c2b75b233458677f4de51270c024aae837

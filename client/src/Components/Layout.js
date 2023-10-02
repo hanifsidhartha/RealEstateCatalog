@@ -5,17 +5,17 @@ import { Outlet } from "react-router-dom";
 
 const Layout = () => {
   return (
-    <>
+    <div className="layout">
       <div className="app">
         <SideBar />
       </div>
-      <div className="content">
+      <div className="content alsdkfasldfj">
         <Navbar />
-        <main>
+        <main className="main-content">
           <Outlet />
         </main>
       </div>
-    </>
+    </div>
   );
 };
 

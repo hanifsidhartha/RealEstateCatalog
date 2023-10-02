@@ -1,11 +1,29 @@
 import React from "react";
 import "../styles/Navbar.css";
+import { useNavigate } from "react-router-dom";
+import ImgUrl from "../assets/images/ImgUrl";
 
 const Navbar = () => {
+  const userName = localStorage.getItem("name");
+  const userEmail = localStorage.getItem("email");
+
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/login");
+  };
   return (
     <nav className="navbar">
-      {/* Add your navbar content here */}
-      <h2>Navbar</h2>
+      <div className="left-pane">Email ID: {userEmail || ""}</div>
+      <div className="right-pane" style={{}}>
+        <div>
+          <img src={ImgUrl.UserIcon} alt="pic misssing" />
+        </div>
+        <div>{userName || ""}</div>
+        <div>
+          <img src={ImgUrl.Logout} onClick={handleLogout} alt="pic misssing" />
+        </div>
+      </div>
     </nav>
   );
 };
