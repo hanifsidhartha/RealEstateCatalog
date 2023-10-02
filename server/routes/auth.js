@@ -80,6 +80,7 @@ router.post("/login", async (req, res) => {
     const cus_data = {
       token: token,
       name: user.name,
+      email: user.email,
     };
 
     return res.status(200).json(gen_res(200, "success", cus_data));

@@ -120,7 +120,7 @@ const Home = () => {
         {data?.data?.map((data, index) => (
           <div key={index} className="home-02">
             <div>{generateNextPPDId()}</div>
-            <div>Add image here</div>
+            <div>{data.addPhoto}</div>
             <div>{data.property_type}</div>
             <div>{data.contact}</div>
             <div>{data.area}</div>
