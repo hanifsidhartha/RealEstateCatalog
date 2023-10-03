@@ -6,9 +6,9 @@ import ProgressSteps from "../Components/ProgressSteps";
 
 export default function LocationInfo() {
   const navigate = useNavigate();
-  const basicInfo = localStorage.getItem("basicInfo");
-  const propertyDetails = localStorage.getItem("propertydetails");
-  const generalInfo = localStorage.getItem("generalInfo");
+  const basicInfo = JSON.parse(localStorage.getItem("basicInfo"));
+  const propertyDetails = JSON.parse(localStorage.getItem("propertydetails"));
+  const generalInfo = JSON.parse(localStorage.getItem("generalInfo"));
   const [formData, setFormData] = useState({
     email: "",
     city: "",
@@ -25,58 +25,50 @@ export default function LocationInfo() {
     setFormData({ ...formData, [name]: value });
   };
 
-  const parsedBasic = JSON.parse(basicInfo);
-  const parsedProperty = JSON.parse(propertyDetails);
-  const parsedgeneral = JSON.parse(generalInfo);
-
-  const handleSave = () => {
+  const handleSave = async () => {
     navigate("/layout/home");
-    const wholeData = {
-      ...parsedBasic,
-      ...parsedProperty,
-      ...parsedgeneral,
-      ...formData,
-    };
-    console.log("Request Data:", wholeData); // Log the request data
-    const token = localStorage.getItem("token");
-
-    fetch("http://localhost:5001/add-property", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Include the authorization token
-      },
-      body: JSON.stringify(wholeData),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          console.error(
-            "Network response was not ok:",
-            response.status,
-            response.statusText
-          );
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((response_data) => {
-        console.log("Response from server:", response_data);
-
-        if (response_data.code === 200) {
-          // console.log("Success: Redirecting to /layout/home");
-          toast.success(response_data.message);
-          navigate("/layout/home");
-        } else {
-          // console.log("Error: Redirecting to /layout/basicinfo");
-          toast.error(response_data.message);
-          navigate("/layout/basicinfo");
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-        alert("Failed to save property.");
-        return;
+    try {
+      const wholeData = {
+        ...basicInfo,
+        ...propertyDetails,
+        ...generalInfo,
+        ...formData,
+      };
+      console.log("Request Data:", wholeData); // Log the request data
+      const token = localStorage.getItem("token");
+      const response = await fetch("http://localhost:5001/add-property", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Include the authorization token
+        },
+        body: JSON.stringify(wholeData),
       });
+      if (!response.ok) {
+        console.error(
+          "Network response was not ok:",
+          response.status,
+          response.statusText
+        );
+        throw new Error("Network response was not ok");
+      }
+      const response_data = await response.json();
+      console.log("Response from server:", response_data);
+
+      if (response_data.code === 200) {
+        console.log("Navigating to /layout/home...");
+        toast.success(response_data.message);
+        navigate("/layout/home");
+      } else {
+        console.log("Navigating to /layout/basicinfo...");
+        toast.error(response_data.message);
+        navigate("/layout/basicinfo");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Failed to save property.");
+      return;
+    }
   };
 
   const handleCancel = () => {

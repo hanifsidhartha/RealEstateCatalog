@@ -8,6 +8,7 @@ import UserIcon from "../images/Group 25.svg";
 import Logout from "../images/logout.svg";
 import Edit from "../images/edit.svg";
 import Delete from "../images/delete.svg";
+import Search from "../images/search.svg";
 
 const ImgUrl = {
   Assist,
@@ -20,6 +21,7 @@ const ImgUrl = {
   Logout,
   Edit,
   Delete,
+  Search,
 };
 
 export default ImgUrl;

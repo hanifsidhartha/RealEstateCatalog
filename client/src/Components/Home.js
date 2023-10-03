@@ -8,77 +8,75 @@ import { toast } from "react-toastify";
 const Home = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState(""); // State for search query
   const token = localStorage.getItem("token");
   const ppdCounter = useRef(1125);
 
   useEffect(() => {
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    };
+    const fetchData = async () => {
+      try {
+        const requestOptions = {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        };
 
-    // Make a GET request using the fetch API
-    fetch("http://localhost:5001/list-properties", requestOptions)
-      .then((response) => {
+        // Make a GET request using the fetch API
+        const response = await fetch(
+          "http://localhost:5001/list-properties",
+          requestOptions
+        );
+
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-        return response.json();
-      })
-      .then((responseData) => {
-        // Set the fetched data in the state
+        const responseData = await response.json();
         setData(responseData);
-        // Initialize the counter with your starting value
-        // setPpdCounter(1125);
-      })
-      .catch((fetchError) => {
-        // Handle any errors that occurred during the fetch
-        toast.error(fetchError);
-      });
+      } catch (error) {
+        toast.error(error.message);
+      }
+    };
+    fetchData();
   }, [token]);
 
   // delete record
 
-  const handleDelete = (id) => {
-    console.log("delete data", id);
+  const handleDelete = async (id) => {
+    try {
+      const deleteRequestOptions = {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          property_id: id,
+        }),
+      };
 
-    const deleteRequestOptions = {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        property_id: id,
-      }),
-    };
+      const resp = await fetch(
+        "http://localhost:5001/delete-property",
+        deleteRequestOptions
+      );
+      if (!resp.ok) {
+        throw new Error("Network response was not ok");
+      }
 
-    fetch("http://localhost:5001/delete-property", deleteRequestOptions)
-      .then((resp) => {
-        if (!resp.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return resp.json();
-      })
-      .then((responseData) => {
-        // Set the fetched data in the state
-        if (
-          responseData.code === 200 &&
-          responseData.message === "Property ID is required"
-        ) {
-          // Handle the error here, e.g., display it to the user
-          toast.error("Property ID is required");
-        } else {
-          setData(responseData);
-        }
-      })
-      .catch((fetchError) => {
-        // Handle any errors that occurred during the fetch
-        toast.error(fetchError.message);
-      });
+      const responseData = await resp.json();
+
+      if (
+        responseData.code === 200 &&
+        responseData.message === "Property ID is required"
+      ) {
+        toast.error("Property ID is required");
+      } else {
+        setData(responseData);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   const handleEditData = (id) => {
@@ -90,12 +88,53 @@ const Home = () => {
     return nextPPDId;
   };
 
+  const handleSearch = () => {
+    if (!searchQuery) {
+      toast.error("Please enter a search query");
+      return;
+    }
+
+    // Send a POST request to the search endpoint in your Node.js API
+    fetch("http://localhost:5001/search-properties", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ query: searchQuery }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((responseData) => {
+        // Update the data state with the search results
+        setData(responseData.results);
+      })
+      .catch((fetchError) => {
+        // Handle any errors that occurred during the fetch
+        toast.error(fetchError.message);
+      });
+  };
   return (
     <>
       <div className="home">
         <div className="home-01">
-          <div>
-            <input type="text" placeholder="Search PPD ID" />
+          <div className="input-container">
+            <input
+              type="text"
+              placeholder="Search PPD ID"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <img
+              src={ImgUrl.Search}
+              alt="Search icon"
+              className="search-icon"
+              onClick={handleSearch}
+            />
           </div>
           <div>
             <button
