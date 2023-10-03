@@ -65,7 +65,7 @@ router.post("/add-property", async (req, res) => {
         .findOne({ email: decoded.email });
 
       if (!user) {
-        return res.status(402).json(gen_res(402, "Invalid Token", {}));
+        return res.status(403).json(gen_res(403, "Invalid Token", {}));
       }
 
       if (!req.body || Object.keys(req.body).length === 0) {
@@ -88,7 +88,7 @@ router.post("/add-property", async (req, res) => {
       });
     } catch (err) {
       console.error(err);
-      return res.status(402).json(gen_res(402, "Authorization Failed", {}));
+      return res.status(403).json(gen_res(403, "Authorization Failed", {}));
     }
   } catch (error) {
     console.error(error);
@@ -185,6 +185,27 @@ router.delete("/delete-property", async (req, res) => {
     console.error(error);
     return res.status(500).json(gen_res(500, "Internal Server Error", {}));
   }
+});
+
+// Endpoint for searching properties
+router.post("/search-properties", (req, res) => {
+  const { query } = req.body;
+
+  if (!query) {
+    return res.status(400).json({ message: "Search query is required" });
+  }
+
+  // Perform a search based on the query
+  const results = properties.filter((property) => {
+    const lowercaseQuery = query.toLowerCase();
+    return (
+      property.ppdId.toLowerCase().includes(lowercaseQuery) ||
+      property.name.toLowerCase().includes(lowercaseQuery) ||
+      property.contact.toLowerCase().includes(lowercaseQuery)
+    );
+  });
+
+  res.json({ results });
 });
 
 module.exports = router;

@@ -49,7 +49,7 @@ const SideBar = () => {
       <ul className="menu">
         {menuItems.map((menuItem, index) => (
           <li key={index}>
-            <NavLink to={menuItem?.nav} activeClassName="active">
+            <NavLink to={menuItem?.nav} activeclassname="active">
               <img
                 src={menuItem.image}
                 alt={`${menuItem.text} Icon`}

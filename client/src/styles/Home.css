@@ -79,3 +79,17 @@ body {
   color: #555; /* Adjust the color to your preference */
   margin-top: 50px;
 }
+.input-container {
+  position: relative;
+}
+
+.input-container input {
+  padding-right: 30px; /* Adjust the padding to make space for the image */
+}
+
+.search-icon {
+  position: absolute;
+  top: 50%;
+  right: 10px; /* Adjust the position as needed */
+  transform: translateY(-50%);
+}

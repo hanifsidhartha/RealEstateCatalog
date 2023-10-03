@@ -55,8 +55,8 @@ const Login = () => {
         }
       } else {
         const response_data = await response.json();
-        console.error("Login failed:", response_data.error);
-        toast.error("Login failed: " + response_data.error);
+        console.error("Login failed:", response_data.message);
+        toast.error("Login failed: " + response_data.message);
       }
     } catch (error) {
       console.error("Error:", error);
