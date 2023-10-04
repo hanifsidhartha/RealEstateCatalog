@@ -34,8 +34,7 @@ export default function GeneraInfo() {
     navigate("/layout/property-detail");
   };
   const handleImageClick = () => {
-    // Trigger the file input when the image is clicked
-    const fileInput = document.getElementById("addPhoto");
+    const fileInput = document.getElementById("addPhoto"); // Trigger the file input when the image is clicked
     fileInput.click();
   };
 
@@ -47,16 +46,13 @@ export default function GeneraInfo() {
         <div className="form-section">
           <div className="form-row">
             <label htmlFor="name">Name</label>
-            <select
+            <input
               id="name"
               name="name"
               value={formData.name}
               onChange={handleChange}
-            >
-              <option value="">Owner</option>
-              <option value="Owner">Owner</option>
-              <option value="Other">Other</option>
-            </select>
+              placeholder="Enter name"
+            />
 
             <label htmlFor="postedBy">Posted By</label>
             <select
@@ -79,6 +75,8 @@ export default function GeneraInfo() {
               <option value="">Please Select</option>
               <option value="Basic">Basic</option>
               <option value="Premium">Premium</option>
+              <option value="Highlighted Listings">Highlighted Listings</option>
+              <option value="Extended Duration">Extended Duration</option>
             </select>
             <div className="imge" onClick={handleImageClick}>
               <img
@@ -134,6 +132,8 @@ export default function GeneraInfo() {
               <option value="">Please Select</option>
               <option value="Standard">Standard</option>
               <option value="Advanced">Advanced</option>
+              <option value="Premium">Premium</option>
+              <option value="Custom">Advanced</option>
             </select>
           </div>
         </div>

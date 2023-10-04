@@ -43,6 +43,8 @@ const propertySchema = new mongoose.Schema({
   pincode: String,
   landmark: String,
   longitude: String,
+  image: String,
+  price: String,
 });
 
 module.exports = mongoose.model("Property", propertySchema);

@@ -32,7 +32,6 @@ const Signup = () => {
     }
 
     if (password.length < 8) {
-      // Change 8 to your desired minimum length
       toast.error("Password must be at least 8 characters long");
       return;
     }
@@ -50,7 +49,7 @@ const Signup = () => {
       if (response.ok) {
         const data = await response.json();
         if (data.code === 200) {
-          setName(""); // Clear input fields
+          setName("");
           setEmail("");
           setPassword("");
           toast.success("Signup successful", { autoClose: 2000 });

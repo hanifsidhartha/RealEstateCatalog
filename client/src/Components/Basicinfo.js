@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/Basicinfo.css"; // Import your custom CSS for styling
+import "../styles/Basicinfo.css";
 import ProgressSteps from "../Components/ProgressSteps";
 
 const PropertyForm = () => {
@@ -21,7 +21,7 @@ const PropertyForm = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-  console.log(formData);
+  // console.log(formData);
 
   // useEffect(() => {
   // }, [formData]);
@@ -52,21 +52,17 @@ const PropertyForm = () => {
               <option value="">Select Property Type</option>
               <option value="Apartment">Apartment</option>
               <option value="House">House</option>
-              <option value="Condo">Condo</option>
+              <option value="Condo">Villa</option>
             </select>
 
             <label htmlFor="price">Price</label>
-            <select
+            <input
               id="price"
               name="price"
               value={formData.price}
               onChange={handleChange}
-            >
-              <option value="">Example: 100000</option>
-              <option value="10000">10,000</option>
-              <option value="20000">20,000</option>
-              <option value="30000">30,000</option>
-            </select>
+              placeholder="10000"
+            />
           </div>
 
           <div className="form-row">
@@ -92,6 +88,10 @@ const PropertyForm = () => {
               <option value="">Select Property Description</option>
               <option value="Spacious">Spacious</option>
               <option value="Cozy">Cozy</option>
+              <option value="Charming">Charming</option>
+              <option value="Modern">Modern</option>
+              <option value="Luxurious">Luxurious</option>
+              <option value="Elegant">Elegant</option>
             </select>
           </div>
         </div>

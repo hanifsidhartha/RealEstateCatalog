@@ -6,6 +6,10 @@ import Basicinfo from "./Components/Basicinfo";
 import PropertyDetails from "./Components/PropertyDetails";
 import GeneraInfo from "./Components/GeneraInfo";
 import LocationInfo from "./Components/LocationInfo";
+import ViewsDataBasic from "./Components/ViewsDatabasic";
+import ViewsDataProperty from "./Components/ViewsDataProperty";
+import ViewsDataGeneral from "./Components/ViewsDataGeneral";
+import ViewsDataLocation from "./Components/ViewsDataLocation";
 import {
   BrowserRouter,
   Routes,
@@ -32,6 +36,12 @@ function App() {
             <Route path="property-detail" element={<PropertyDetails />} />
             <Route path="general-info" element={<GeneraInfo />} />
             <Route path="location-info" element={<LocationInfo />} />
+            <Route path="viewsdatabasic" element={<ViewsDataBasic />} />
+            <Route path="viewsdataproperty" element={<ViewsDataProperty />} />
+            <Route path="viewsdatageneral" element={<ViewsDataGeneral />} />
+            <Route path="viewsdatalocation" element={<ViewsDataLocation />} />
+
+            <Route path="/layout/basicinfo/:ppd_id" element={<Basicinfo />} />
           </Route>
         </Routes>
       </BrowserRouter>
