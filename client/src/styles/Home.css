@@ -63,20 +63,25 @@ body {
   border-right: none;
 }
 .action-button {
-  /* margin: 10px; */
+  display: inline-block;
   background-color: none;
-  border: none;
+  /* border: 1px solid red; */
+  padding-right: 10px;
 }
 .action-button img {
-  width: 10px;
-  height: 10px;
+  width: 20px;
+  height: 20px;
   background-color: none;
   border: none;
+  background-color: black;
+  padding: 3px;
+
+  border-radius: 5px;
 }
 .no_data {
   text-align: center;
   font-size: 18px;
-  color: #555; /* Adjust the color to your preference */
+  color: #555;
   margin-top: 50px;
 }
 .input-container {
@@ -84,12 +89,12 @@ body {
 }
 
 .input-container input {
-  padding-right: 30px; /* Adjust the padding to make space for the image */
+  padding-right: 30px;
 }
 
 .search-icon {
   position: absolute;
   top: 50%;
-  right: 10px; /* Adjust the position as needed */
+  right: 10px;
   transform: translateY(-50%);
 }

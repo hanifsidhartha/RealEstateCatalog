@@ -144,7 +144,7 @@ export default function PropertyDetails() {
               id="areaUnit"
               name="areaUnit"
               value={formData.areaUnit}
-              placeholder="97852 52525"
+              placeholder="1400"
               onChange={handleChange}
             />
             <label htmlFor="noOfFloor">No of Floor</label>

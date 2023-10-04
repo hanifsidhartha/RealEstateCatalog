@@ -59,36 +59,6 @@ const SideBar = () => {
             </NavLink>
           </li>
         ))}
-        {/* <li>
-          <NavLink exact to="/" activeClassName="active">
-            Property
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/assistance" activeClassName="active">
-            Assistance
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/received-interest" activeClassName="active">
-            Received Interest
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/sent-interest" activeClassName="active">
-            Sent Interest
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/property-views" activeClassName="active">
-            Property Views
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/tariff-plan" activeClassName="active">
-            Tariff Plan
-          </NavLink>
-        </li> */}
       </ul>
     </div>
   );

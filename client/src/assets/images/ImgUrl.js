@@ -9,6 +9,7 @@ import Logout from "../images/logout.svg";
 import Edit from "../images/edit.svg";
 import Delete from "../images/delete.svg";
 import Search from "../images/search.svg";
+import Views from "../images/views.svg";
 
 const ImgUrl = {
   Assist,
@@ -22,6 +23,7 @@ const ImgUrl = {
   Edit,
   Delete,
   Search,
+  Views,
 };
 
 export default ImgUrl;

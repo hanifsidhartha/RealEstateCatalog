@@ -3,8 +3,6 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
-
 require("dotenv").config();
 
 const PORT = process.env.PORT;

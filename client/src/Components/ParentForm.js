@@ -54,8 +54,7 @@ const ParentForm = () => {
   const navigate = useNavigate();
 
   const handleDataChange = (data) => {
-    // Merge the data received from child components into the formData state
-    setFormData({ ...formData, ...data });
+    setFormData({ ...formData, ...data }); // Merge the data received from child components into the formData state
   };
 
   const handleSave = () => {
