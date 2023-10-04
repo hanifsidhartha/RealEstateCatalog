@@ -99,7 +99,7 @@ router.post("/list-properties", verifyToken, async (req, res) => {
         ppp_id: element._id,
         image: element.photo,
         property_type: element.propertyType,
-        contact: element.mobileNumber,
+        contact: element.mobile,
         area: element.area,
         views: "02",
         status: "active",

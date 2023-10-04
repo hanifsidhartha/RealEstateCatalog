@@ -3,10 +3,12 @@ import { useNavigate } from "react-router-dom";
 import ImgUrl from "../assets/images/ImgUrl";
 import "../styles/Home.css";
 import { toast } from "react-toastify";
+import DataTable from "react-data-table-component";
 
 const Home = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
+  console.log(data?.data, "data");
   const [searchQuery, setSearchQuery] = useState(""); // State for search query
   const [ppdIds, setPpdIds] = useState([]);
 
@@ -39,6 +41,11 @@ const Home = () => {
           ppdCounter.current += 1;
           return nextPPDId;
         });
+        const dataWithPpdIds = responseData.data.map((item, index) => ({
+          ...item,
+          ppdId: generatedPpdIds[index],  // Add ppdId property to each item
+        }));
+        setData({ ...responseData, data: dataWithPpdIds });  
         setPpdIds(generatedPpdIds);
       } catch (error) {
         toast.error(error.message);
@@ -52,7 +59,8 @@ const Home = () => {
   };
 
   const handleEditData = (id) => {
-    navigate(`/layout/basicinfo/${ppdIds}`);
+    console.log(id , "if");
+    navigate(`/layout/basicinfo/${id}`);
   };
 
   const handleSearch = async () => {
@@ -82,50 +90,63 @@ const Home = () => {
       if (responseData.results.length === 0) {
         toast.info("No matching data found");
       } else {
-        setData(responseData.results);
+        console.log(responseData?.results, "result");
+        // setData(responseData.results);
       }
     } catch (error) {
       toast.error(error.message);
     }
   };
-  // const columns = [
-  //   {
-  //     name: "PPD ID",
-  //     selector: (row) => row.ppdId,
-  //   },
-  //   {
-  //     name: "Image",
-  //     selector: (row) => row.image,
-  //   },
-  //   {
-  //     name: "Property",
-  //     selector: (row) => row.property,
-  //   },
-  //   {
-  //     name: "Contact",
-  //     selector: (row) => row.contact,
-  //   },
-  //   {
-  //     name: "Area",
-  //     selector: (row) => row.area,
-  //   },
-  //   {
-  //     name: "Views",
-  //     selector: (row) => row.views,
-  //   },
-  //   {
-  //     name: "Status",
-  //     selector: (row) => row.status,
-  //   },
-  //   {
-  //     name: "Days Left",
-  //     selector: (row) => row.daysLeft,
-  //   },
-  //   {
-  //     name: "Action",
-  //     selector: (row) => row.action,
-  //   },
-  // ];
+
+  const columns = [
+    {
+      name: "PPD ID",
+      selector: (row) => row.ppdId,
+    },
+    // {
+    //   name: "Image",
+    //   selector: (row) => row["image"],
+    // },
+    {
+      name: "Property",
+      selector: (row) => row["property_type"],
+    },
+    {
+      name: "Contact",
+      selector: (row) => row.contact,
+    },
+    {
+      name: "Area",
+      selector: (row) => row["area"],
+    },
+    {
+      name: "Views",
+      selector: (row) => row["views"],
+    },
+    {
+      name: "Status",
+      selector: (row) => row["status"],
+    },
+    {
+      name: "Days Left",
+      selector: (row) => row["days_left"],
+    },
+    {
+      name: "Action",
+      selector: (row) => (
+        <>
+          <div>
+            <div className="action-button" onClick={() => handleViews(row)}>
+              <img src={ImgUrl?.Views} alt="pic missing" />
+            </div>
+            <div className="action-button" onClick={() => handleEditData(row?.ppdId)}>
+              <img src={ImgUrl.Edit} alt="pic missing" />
+            </div>
+          </div>
+        </>
+      ),
+    },
+  ];
 
   return (
     <>
@@ -154,7 +175,8 @@ const Home = () => {
             </button>
           </div>
         </div>
-        <div className="home-02">
+
+        {/* <div className="home-02">
           <div className="heading">PPD ID</div>
           <div className="heading">Image</div>
           <div className="heading">Property</div>
@@ -164,7 +186,7 @@ const Home = () => {
           <div className="heading">Status</div>
           <div className="heading">Days Left</div>
           <div className="heading">Action</div>
-        </div>
+        </div> */}
         {/* 
         {data?.data?.map((data, index) => (
           <div key={index} className="home-02">
@@ -190,6 +212,7 @@ const Home = () => {
           </div>
         ))} */}
       </div>
+      <DataTable columns={columns} data={data?.data} />
     </>
   );
 };
