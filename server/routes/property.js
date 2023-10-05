@@ -71,6 +71,8 @@ router.post("/add-property", async (req, res) => {
         const result = await collection.insertOne(req_obj);
         console.log("Success");
         return res.status(200).json({ message: "Success" });
+       
+
       } catch (error) {
         console.error("Error inserting document:", error);
         return res.status(500).json({ message: "Error Inserting Document" });
