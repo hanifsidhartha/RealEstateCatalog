@@ -64,7 +64,16 @@ router.post("/add-property", async (req, res) => {
         return res.status(400).json({ message: "Invalid request" });
       }
 
+      const randomViews = Math.floor(Math.random() * 100) + 1; // Random views between 1 and 100
+      const randomDaysLeft = Math.floor(Math.random() * 30) + 1; // Random days_left between 1 and 30
+      const randomStatus = Math.random() < 0.5 ? "Sold" : "Unsold"; // Random status (Sold or Unsold)
+
       const req_obj = req.body;
+      
+      // Include the generated random values in the property data
+      req_obj.views = randomViews.toString();
+      req_obj.days_left = randomDaysLeft.toString();
+      req_obj.status = randomStatus;
       const collection = db.collection("real_estate_properties");
 
       try {
@@ -103,9 +112,9 @@ router.post("/list-properties", verifyToken, async (req, res) => {
         property_type: element.propertyType,
         contact: element.mobile,
         area: element.area,
-        views: "02",
-        status: "active",
-        days_left: "20",
+        views: element.views,
+        status: element.status,
+        days_left: element.days_left,
       };
       resp_arr.push(resp_obj);
     }
@@ -164,21 +173,35 @@ router.delete("/delete-property", async (req, res) => {
 });
 
 // Endpoint for searching properties
-router.post("/search-properties", async (req, res) => {
-  const { query } = req.body;
-  if (!query) {
-    return res.status(400).json({ message: "Search query is required" });
-  }
+router.post("/search-by-ppdId", async (req, res) => {
   try {
-    // Use your database model and perform a search query here
-    const results = await Property.find({
-      $or: [
-        { ppdId: { $regex: new RegExp(query, "i") } },
-        { name: { $regex: new RegExp(query, "i") } },
-      ],
-    });
-    console.log("Search results:", results);
-    res.json({ results });
+    const ppdId = req.body.ppdId; // Get the PPD ID from the request body
+    console.log("Search query:", ppdId);
+
+    // Search for properties by PPD ID in your database
+    const properties = await db
+      .collection("real_estate_properties")
+      .find({ ppdId })
+      .toArray();
+      console.log("Matching properties:", properties);
+
+    res.status(200).json({ properties });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+// Define a route to list all properties
+router.get("/all-list-properties", async (req, res) => {
+  try {
+    // Retrieve all properties from your database
+    const properties = await db
+      .collection("real_estate_properties")
+      .find({})
+      .toArray();
+
+    res.status(200).json({ properties });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });

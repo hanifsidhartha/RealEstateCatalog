@@ -55,7 +55,7 @@ const Home = () => {
   }, [token]);
 
   const handleViews = () => {
-    navigate("/layout/ViewsData");
+    navigate("/layout/viewsdatabasic");
   };
 
   const handleEditData = (id) => {
@@ -97,7 +97,6 @@ const Home = () => {
       toast.error(error.message);
     }
   };
-
   const columns = [
     {
       name: "PPD ID",

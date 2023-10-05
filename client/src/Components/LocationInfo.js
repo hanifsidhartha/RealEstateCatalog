@@ -62,7 +62,7 @@ export default function LocationInfo() {
       } else {
         console.log("Navigating to /layout/basicinfo...");
         toast.error(response_data.message);
-        navigate("/layout/basicinfo");
+        navigate("/layout/home");
       }
     } catch (error) {
       console.error("Error:", error);
