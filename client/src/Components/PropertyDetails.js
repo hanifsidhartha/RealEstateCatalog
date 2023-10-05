@@ -1,24 +1,31 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import ProgressSteps from "../Components/ProgressSteps";
 
-export default function PropertyDetails() {
+export default function PropertyDetails({isEdit}) {
+
+  const location = useLocation();
+  const viewData = location.state;
+
   const [formData, setFormData] = useState({
-    length: "",
-    breath: "",
-    totalArea: "",
-    areaUnit: "",
-    noOfBHK: "",
-    noOfFloor: "",
-    attached: "",
-    westernToilet: "",
-    furnished: "",
-    carParking: "",
-    lift: "",
-    electricity: "",
-    facing: "",
+    length: viewData?.length || "",
+    breath:  viewData?.breath ||"",
+    totalArea: viewData?.totalArea || "",
+    areaUnit: viewData?.areaUnit || "",
+    noOfBHK:viewData?.noOfBHK ||  "",
+    noOfFloor:viewData?.noOfFloor ||  "",
+    attached: viewData?.attached || "",
+    westernToilet: viewData?.westernToilet || "",
+    furnished: viewData?.furnished || "",
+    carParking:viewData?.carParking ||  "",
+    lift: viewData?.lift || "",
+    electricity: viewData?.electricity || "",
+    facing:viewData?.facing ||  "",
   });
+
+  const { ppd_id } = useParams();
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,7 +41,7 @@ export default function PropertyDetails() {
 
   const handleSave = () => {
     localStorage.setItem("propertydetails", JSON.stringify(formData));
-    navigate("/layout/general-info");
+    navigate(isEdit ? `/layout/general-info/edit/${ppd_id}`: "/layout/general-info", { state: viewData });
   };
 
   const handleCancel = () => {

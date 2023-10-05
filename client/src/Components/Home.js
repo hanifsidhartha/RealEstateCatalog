@@ -5,15 +5,17 @@ import "../styles/Home.css";
 import { toast } from "react-toastify";
 import DataTable from "react-data-table-component";
 
+
 const Home = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
+  const [originalData, setOriginalData] = useState([]);
   console.log(data?.data, "data");
   const [searchQuery, setSearchQuery] = useState(""); // State for search query
   const [ppdIds, setPpdIds] = useState([]);
 
   const token = localStorage.getItem("token");
-  const ppdCounter = useRef(1125);
+  const ppdCounter = useRef(1101);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,6 +38,7 @@ const Home = () => {
         }
         const responseData = await response.json();
         setData(responseData);
+        setOriginalData(responseData);
         const generatedPpdIds = responseData.data.map(() => {
           const nextPPDId = `PPD${ppdCounter.current}`;
           ppdCounter.current += 1;
@@ -46,6 +49,7 @@ const Home = () => {
           ppdId: generatedPpdIds[index],  // Add ppdId property to each item
         }));
         setData({ ...responseData, data: dataWithPpdIds });  
+        setOriginalData({ ...responseData, data: dataWithPpdIds });  
         setPpdIds(generatedPpdIds);
       } catch (error) {
         toast.error(error.message);
@@ -54,14 +58,100 @@ const Home = () => {
     fetchData();
   }, [token]);
 
-  const handleViews = () => {
-    navigate("/layout/viewsdatabasic");
+  const handleViews = async (id, isEdit) => {
+    const payload = {property_id: id}
+    try {
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload)
+      };
+      const response = await fetch(
+        `http://localhost:5001/view-property/`,
+        requestOptions
+      );
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const responseData = await response.json();
+
+      console.log(responseData,"*****************");
+
+      
+      if (responseData.code === 200) {
+        // const propertyData = responseData.property;
+        localStorage.setItem("propertyData",responseData?.data)
+        // Redirect to the ViewsDatabasic route and pass the property data as props
+        navigate(isEdit ? `/layout/basicinfo/edit/${id}` : "/layout/viewsdatabasic", { state: responseData?.data });
+      } else {
+        toast.info("No matching data found");
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
-  const handleEditData = (id) => {
-    console.log(id , "if");
-    navigate(`/layout/basicinfo/${id}`);
-  };
+  // const handleEditData = (id) => {
+
+  //   const payload = {property_id: id}
+  //   try {
+  //     const requestOptions = {
+  //       method: "POST",
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(payload)
+  //     };
+  //     const response = await fetch(
+  //       `http://localhost:5001/view-property/`,
+  //       requestOptions
+  //     );
+
+  //     if (!response.ok) {
+  //       throw new Error("Network response was not ok");
+  //     }
+
+  //     const responseData = await response.json();
+
+  //     console.log(responseData,"*****************");
+
+      
+  //     if (responseData.code === 200) {
+  //       // const propertyData = responseData.property;
+  //       localStorage.setItem("propertyData",responseData?.data)
+  //       // Redirect to the ViewsDatabasic route and pass the property data as props
+  //       navigate("/layout/viewsdatabasic", { state: responseData?.data });
+  //       navigate(`/layout/basicinfo/edit/${id}`);
+
+  //     } else {
+  //       toast.info("No matching data found");
+  //     }
+  //   } catch (error) {
+  //     toast.error(error.message);
+  //   }
+  //   // console.log(id , "if");
+  //   // navigate(`/layout/basicinfo/edit/${id}`);
+  // };
+
+  const handleSearchInput = (e) =>{
+
+    setSearchQuery(e);
+    if(e && data?.data?.length){
+      const origData = [...data?.data];
+      const filteredData = origData.filter(res => res.ppdId.toLocaleLowerCase().includes(e.toLocaleLowerCase()))
+      console.log(e,"-----------------", data?.data, origData,"***",filteredData);
+      // console.log("filtereddddd data", filteredData);
+      setData({data:filteredData});
+    }else{
+      setData(originalData)
+    }
+  }
 
   const handleSearch = async () => {
     if (!searchQuery) {
@@ -75,10 +165,10 @@ const Home = () => {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ query: searchQuery }),
+        body: JSON.stringify({ ppdId: searchQuery }),
       };
       const response = await fetch(
-        "http://localhost:5001/search-properties",
+        "http://localhost:5001/search-by-ppdId",
         requestOptions
       );
 
@@ -87,58 +177,60 @@ const Home = () => {
       }
 
       const responseData = await response.json();
-      if (responseData.results.length === 0) {
+      if (responseData.properties.length === 0) {
         toast.info("No matching data found");
       } else {
-        console.log(responseData?.results, "result");
-        // setData(responseData.results);
+        console.log(responseData?.properties, "result");
+        setData(responseData.properties);
       }
     } catch (error) {
       toast.error(error.message);
     }
+
+
   };
   const columns = [
     {
-      name: "PPD ID",
+      name: <strong>PPD ID</strong>,
       selector: (row) => row.ppdId,
     },
-    // {
-    //   name: "Image",
-    //   selector: (row) => row["image"],
-    // },
     {
-      name: "Property",
-      selector: (row) => row["property_type"],
+      name: "Image",
+      selector: (row) => row["image"],
     },
     {
-      name: "Contact",
+      name: <strong>Property</strong>,
+      selector: (row) => row.property_type,
+    },
+    {
+      name: <strong>Contact</strong>,
       selector: (row) => row.contact,
     },
     {
-      name: "Area",
+      name: <strong>Area</strong>,
       selector: (row) => row["area"],
     },
     {
-      name: "Views",
+      name: <strong>Views</strong>,
       selector: (row) => row["views"],
     },
     {
-      name: "Status",
+      name: <strong>Status</strong>,
       selector: (row) => row["status"],
     },
     {
-      name: "Days Left",
+      name: <strong>Days Left</strong>,
       selector: (row) => row["days_left"],
     },
     {
-      name: "Action",
+      name: <strong>Action</strong>,
       selector: (row) => (
         <>
           <div>
-            <div className="action-button" onClick={() => handleViews(row)}>
+            <div className="action-button" onClick={() => handleViews(row.ppp_id)}>
               <img src={ImgUrl?.Views} alt="pic missing" />
             </div>
-            <div className="action-button" onClick={() => handleEditData(row?.ppdId)}>
+            <div className="action-button" onClick={() => handleViews(row?.ppp_id, true)}>
               <img src={ImgUrl.Edit} alt="pic missing" />
             </div>
           </div>
@@ -156,13 +248,13 @@ const Home = () => {
               type="text"
               placeholder="Search PPD ID"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => handleSearchInput(e.target.value)}
             />
             <img
               src={ImgUrl.Search}
               alt="Search icon"
               className="search-icon"
-              onClick={handleSearch}
+              // onClick={handleSearch}
             />
           </div>
           <div>
@@ -211,7 +303,8 @@ const Home = () => {
           </div>
         ))} */}
       </div>
-      <DataTable columns={columns} data={data?.data} />
+      {console.log(data?.data,"==============")}
+      <DataTable columns={columns} data={data?.data} pagination  />
     </>
   );
 };

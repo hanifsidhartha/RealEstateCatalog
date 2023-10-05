@@ -1,24 +1,29 @@
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import ProgressSteps from "../Components/ProgressSteps";
 
-export default function LocationInfo() {
+export default function LocationInfo({isEdit}) {
+  const location = useLocation();
+  const viewData = location.state;
+
   const navigate = useNavigate();
   const basicInfo = JSON.parse(localStorage.getItem("basicInfo"));
   const propertyDetails = JSON.parse(localStorage.getItem("propertydetails"));
   const generalInfo = JSON.parse(localStorage.getItem("genralInfo"));
   const [formData, setFormData] = useState({
-    email: "",
-    city: "",
-    area: "",
-    pincode: "",
-    address: "",
-    landmark: "",
-    latitude: "",
-    longitude: "",
+    email: viewData?.email || "",
+    city: viewData?.city || "",
+    area: viewData?.area || "",
+    pincode:viewData?.pincode ||  "",
+    address:viewData?.address ||  "",
+    landmark:viewData?.landmark ||  "",
+    latitude:viewData?.latitude ||  "",
+    longitude:viewData?.longitude ||  "",
   });
+
+  const { ppd_id } = useParams();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,17 +31,18 @@ export default function LocationInfo() {
   };
 
   const handleSave = async () => {
-    navigate("/layout/home");
+    // navigate("/layout/home");
     try {
       const wholeData = {
         ...basicInfo,
         ...propertyDetails,
         ...generalInfo,
         ...formData,
+        ...(isEdit ?{property_id:ppd_id}:"")
       };
       console.log("Request Data:", wholeData); // Log the request data
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5001/add-property", {
+      const response = await fetch(`http://localhost:5001/${isEdit ? "edit-property":"add-property"}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -57,11 +63,11 @@ export default function LocationInfo() {
 
       if (response_data.code === 200) {
         console.log("Navigating to /layout/home...");
-        toast.success(response_data.message);
+        // toast.success(response_data.message);
         navigate("/layout/home");
       } else {
         console.log("Navigating to /layout/basicinfo...");
-        toast.error(response_data.message);
+        // toast.error(response_data.message);
         navigate("/layout/home");
       }
     } catch (error) {
@@ -100,13 +106,13 @@ export default function LocationInfo() {
               required
             >
               <option value="">Select Area</option>
-              <option value="Area1">900</option>
-              <option value="Area2">1200</option>
-              <option value="Area3">1400</option>
-              <option value="Area4">1800</option>
-              <option value="Area5">2100</option>
-              <option value="Area6">2400</option>
-              <option value="Area7">3000</option>
+              <option value="900">900</option>
+              <option value="1200">1200</option>
+              <option value="1400">1400</option>
+              <option value="1800">1800</option>
+              <option value="2100">2100</option>
+              <option value="2400">2400</option>
+              <option value="3000">3000</option>
               {/* Add more area options as needed */}
             </select>
 
@@ -225,7 +231,7 @@ export default function LocationInfo() {
         </div>
         <div className="form-buttons">
           <button onClick={handleCancel}>Previous</button>
-          <button onClick={handleSave}>Add Property</button>
+          <button onClick={handleSave}> {isEdit ? "Save Property" : "Add Property"}</button>
         </div>
       </div>
     </div>

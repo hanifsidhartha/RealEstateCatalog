@@ -1,20 +1,29 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import "../styles/Basicinfo.css";
 import ProgressSteps from "../Components/ProgressSteps";
 
-export default function GeneraInfo() {
+export default function GeneraInfo({isEdit}) {
+
+  const location = useLocation();
+  const viewData = location.state;
+
   const navigate = useNavigate();
+  const [fileName, setFileName] = useState("")
   const [formData, setFormData] = useState({
-    name: "",
-    mobile: "",
-    owner: "",
-    saleType: "",
-    postedBy: "",
-    featuredPackage: "",
-    ppdPackage: "",
-    photo: null,
+    name: viewData?.name || "",
+    mobile: viewData?.mobile || "",
+    owner:viewData?.owner ||  "",
+    saleType: viewData?.saleType || "",
+    postedBy:viewData?.postedBy ||  "",
+    featuredPackage: viewData?.featuredPackage || "",
+    ppdPackage:viewData?.ppdPackage ||  "",
+    photo: viewData?.photo || "",
   });
+  console.log(formData, "formDta");
+
+  const { ppd_id } = useParams();
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,16 +32,26 @@ export default function GeneraInfo() {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    setFormData({ ...formData, photo: file });
+    console.log(file, "file");
+    setFileName(file?.name)
+    var reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+      setFormData({ ...formData, photo: reader.result });
+    };
+    reader.onerror = function (error) {
+      console.log('Error: ', error);
+    };
   };
 
   const handleSave = () => {
     localStorage.setItem("genralInfo", JSON.stringify(formData));
-    navigate("/layout/location-info");
+    navigate(isEdit ? `/layout/location-info/edit/${ppd_id}` : "/layout/location-info", { state: viewData });
   };
   const handleCancel = () => {
     navigate("/layout/property-detail");
   };
+
   const handleImageClick = () => {
     const fileInput = document.getElementById("addPhoto"); // Trigger the file input when the image is clicked
     fileInput.click();
@@ -78,16 +97,16 @@ export default function GeneraInfo() {
               <option value="Highlighted Listings">Highlighted Listings</option>
               <option value="Extended Duration">Extended Duration</option>
             </select>
-            <div className="imge" onClick={handleImageClick}>
+            <div className="imge" >
               <img
                 src={
                   formData.photo
-                    ? URL.createObjectURL(formData.photo)
+                    ? formData?.photo
                     : "/950796.png"
                 }
                 alt="pic missing"
               />
-              <label htmlFor="addPhoto">Add Photo</label>
+              <label htmlFor="addPhoto">{fileName ? fileName : "Add Photo"}</label>
               <input
                 type="file"
                 id="addPhoto"
