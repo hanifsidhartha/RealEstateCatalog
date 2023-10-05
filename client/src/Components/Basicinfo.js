@@ -1,19 +1,25 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import "../styles/Basicinfo.css";
 import ProgressSteps from "../Components/ProgressSteps";
 
-const PropertyForm = () => {
+const PropertyForm = ({isEdit}) => {
+
+  const location = useLocation();
+  const viewData = location.state;
+
   const [formData, setFormData] = useState({
-    propertyType: "",
-    negotiable: "",
-    price: "",
-    ownership: "",
-    propertyAge: "",
-    propertyApproved: "",
-    propertyDescription: "",
-    bankLoan: "",
+    propertyType: viewData?.propertyType || "",
+    negotiable: viewData?.negotiable || "",
+    price: viewData?.price ||"",
+    ownership:viewData?.ownership || "",
+    propertyAge:viewData?.propertyAge || "",
+    propertyApproved: viewData?.propertyApproved ||"",
+    propertyDescription:viewData?.propertyDescription || "",
+    bankLoan: viewData?.bankLoan ||"",
   });
+
+  const { ppd_id } = useParams();
 
   const navigate = useNavigate();
 
@@ -28,7 +34,7 @@ const PropertyForm = () => {
 
   const handleSave = () => {
     localStorage.setItem("basicInfo", JSON.stringify(formData));
-    navigate("/layout/property-detail");
+    navigate(isEdit? `/layout/property-detail/edit/${ppd_id}`: "/layout/property-detail", { state: viewData });
   };
 
   const handleCancel = () => {

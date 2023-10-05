@@ -6,6 +6,9 @@
   box-shadow: 10px 14px 70px rgba(0, 0, 0, 0.3) rgba;
   font-size: 12px;
 }
+.property-form-view{
+  display: flex;
+}
 .form-section {
   width: 50%;
   display: inline-block;

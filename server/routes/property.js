@@ -64,27 +64,89 @@ router.post("/add-property", async (req, res) => {
         return res.status(400).json({ message: "Invalid request" });
       }
 
-      const randomViews = Math.floor(Math.random() * 100) + 1; // Random views between 1 and 100
-      const randomDaysLeft = Math.floor(Math.random() * 30) + 1; // Random days_left between 1 and 30
-      const randomStatus = Math.random() < 0.5 ? "Sold" : "Unsold"; // Random status (Sold or Unsold)
-
       const req_obj = req.body;
-      
-      // Include the generated random values in the property data
-      req_obj.views = randomViews.toString();
-      req_obj.days_left = randomDaysLeft.toString();
-      req_obj.status = randomStatus;
+      req_obj.views = 0;
+
       const collection = db.collection("real_estate_properties");
 
       try {
         const result = await collection.insertOne(req_obj);
         console.log("Success");
         return res.status(200).json({ message: "Success" });
-       
-
       } catch (error) {
         console.error("Error inserting document:", error);
         return res.status(500).json({ message: "Error Inserting Document" });
+      }
+    } catch (err) {
+      console.error(err);
+      return res.status(403).json({ message: "Authorization Failed" });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+// Edit Property
+router.post("/edit-property", async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader) {
+      return res.status(401).json({ message: "Authorization header missing" });
+    }
+
+    const token = authHeader.split(" ")[1];
+
+    try {
+      const decoded = jwt.verify(token, JWT_SECRET);
+      const user = await db
+        .collection("users")
+        .findOne({ email: decoded.email });
+
+      if (!user) {
+        return res.status(403).json({ message: "Invalid Token" });
+      }
+
+      if (!req.body || Object.keys(req.body).length === 0) {
+        return res.status(400).json({ message: "Invalid request" });
+      }
+      const { property_id } = req.body;
+
+      const req_obj = req.body;
+      const collection = db.collection("real_estate_properties");
+
+      // The ObjectId you want to search for
+      const objectIdToFind = new ObjectId(property_id);
+
+      // The update operation
+      const updateOperation = {
+        $set: { ...req_obj },
+      };
+
+      try {
+        // Perform the findOneAndUpdate operation
+        const result = await db
+          .collection("real_estate_properties")
+          .findOneAndUpdate({ _id: objectIdToFind }, updateOperation, {
+            returnOriginal: false, // Set to false to return the updated document
+          });
+
+        // Check if the document was found and updated
+        if (result.value) {
+          console.log("Updated document:", result.value);
+          return res
+            .status(200)
+            .json({ message: "Success - Updated Document" });
+        } else {
+          console.log("Document not found", result);
+          return res.status(200).json({ message: "Document not found" });
+        }
+      } catch (err) {
+        console.error("Error updating document:", err);
+        return res
+          .status(200)
+          .json({ message: "Error Updating/Inserting Document" });
       }
     } catch (err) {
       console.error(err);
@@ -113,8 +175,8 @@ router.post("/list-properties", verifyToken, async (req, res) => {
         contact: element.mobile,
         area: element.area,
         views: element.views,
-        status: element.status,
-        days_left: element.days_left,
+        status: "active",
+        days_left: "20",
       };
       resp_arr.push(resp_obj);
     }
@@ -172,39 +234,57 @@ router.delete("/delete-property", async (req, res) => {
   }
 });
 
-// Endpoint for searching properties
-router.post("/search-by-ppdId", async (req, res) => {
+// Define the /view-property route
+router.post("/view-property", async (req, res) => {
   try {
-    const ppdId = req.body.ppdId; // Get the PPD ID from the request body
-    console.log("Search query:", ppdId);
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res
+        .status(401)
+        .json(gen_res(401, "Authorization header missing", {}));
+    }
+    const { property_id } = req.body;
+    if (!property_id) {
+      return res.status(400).json(gen_res(400, "Property ID is required", {}));
+    }
+    const token = authHeader.split(" ")[1]; // Assuming it's a Bearer token
+    try {
+      const decoded = jwt.verify(token, JWT_SECRET);
+      console.log("Decoded JWT payload:", decoded);
+      const user = await db
+        .collection("users")
+        .findOne({ email: decoded.email });
+      if (!user) {
+        return res.status(402).json(gen_res(402, "Invalid Token", {}));
+      }
+      const collection = db.collection("real_estate_properties");
+      try {
+        const filter = { _id: new ObjectId(property_id) };
+        const update = { $inc: { views: 1 } }; // Increment the "views" field by 1
 
-    // Search for properties by PPD ID in your database
-    const properties = await db
-      .collection("real_estate_properties")
-      .find({ ppdId })
-      .toArray();
-      console.log("Matching properties:", properties);
+        const result_1 = await collection.findOneAndUpdate(filter, update);
+        const result = await collection.findOne({
+          _id: new ObjectId(property_id),
+        });
 
-    res.status(200).json({ properties });
+        console.log("asdf", "result_1", property_id);
+
+        if (result) {
+          return res.status(200).json(gen_res(200, "Success", result));
+        } else {
+          return res.status(404).json(gen_res(404, "Property not found", {}));
+        }
+      } catch (err) {
+        console.error("Error in viewing property:", err);
+        return res.status(500).json(gen_res(500, "Internal Server Error", {}));
+      }
+    } catch (err) {
+      console.error(err);
+      return res.status(402).json(gen_res(402, "Authorization Failed", {}));
+    }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-});
-
-// Define a route to list all properties
-router.get("/all-list-properties", async (req, res) => {
-  try {
-    // Retrieve all properties from your database
-    const properties = await db
-      .collection("real_estate_properties")
-      .find({})
-      .toArray();
-
-    res.status(200).json({ properties });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
+    return res.status(500).json(gen_res(500, "Internal Server Error", {}));
   }
 });
 

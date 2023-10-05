@@ -35,13 +35,16 @@ function App() {
             <Route path="basicinfo" element={<Basicinfo />} />
             <Route path="property-detail" element={<PropertyDetails />} />
             <Route path="general-info" element={<GeneraInfo />} />
-            <Route path="location-info" element={<LocationInfo />} />
             <Route path="viewsdatabasic" element={<ViewsDataBasic />} />
+            <Route path="location-info" element={<LocationInfo />} />
             <Route path="viewsdataproperty" element={<ViewsDataProperty />} />
             <Route path="viewsdatageneral" element={<ViewsDataGeneral />} />
             <Route path="viewsdatalocation" element={<ViewsDataLocation />} />
 
-            <Route path="/layout/basicinfo/:ppd_id" element={<Basicinfo />} />
+            <Route path="/layout/basicinfo/edit/:ppd_id" element={<Basicinfo isEdit />} />
+            <Route path="property-detail/edit/:ppd_id" element={<PropertyDetails isEdit />} />
+            <Route path="general-info/edit/:ppd_id" element={<GeneraInfo isEdit />} />
+            <Route path="location-info/edit/:ppd_id" element={<LocationInfo isEdit />} />
           </Route>
         </Routes>
       </BrowserRouter>
