@@ -30,7 +30,7 @@ const ViewsDataGeneral = () => {
               <div className="imge">
                 <label htmlFor="addPhoto">Picture</label>
                 {/* <input value={viewData?.photo}/> */}
-                <img src={`${viewData?.photo}`} alt="photo"/>
+                <img src={`${viewData?.photo}`} alt="missing"/>
               </div>
             </div>
           </div>

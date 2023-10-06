@@ -153,40 +153,40 @@ const Home = () => {
     }
   }
 
-  const handleSearch = async () => {
-    if (!searchQuery) {
-      toast.error("Please enter a search query");
-      return;
-    }
-    try {
-      const requestOptions = {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ppdId: searchQuery }),
-      };
-      const response = await fetch(
-        "http://localhost:5001/search-by-ppdId",
-        requestOptions
-      );
+  // const handleSearch = async () => {
+  //   if (!searchQuery) {
+  //     toast.error("Please enter a search query");
+  //     return;
+  //   }
+  //   try {
+  //     const requestOptions = {
+  //       method: "POST",
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ ppdId: searchQuery }),
+  //     };
+  //     const response = await fetch(
+  //       "http://localhost:5001/search-by-ppdId",
+  //       requestOptions
+  //     );
 
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
+  //     if (!response.ok) {
+  //       throw new Error("Network response was not ok");
+  //     }
 
-      const responseData = await response.json();
-      if (responseData.properties.length === 0) {
-        toast.info("No matching data found");
-      } else {
-        console.log(responseData?.properties, "result");
-        setData(responseData.properties);
-      }
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
+  //     const responseData = await response.json();
+  //     if (responseData.properties.length === 0) {
+  //       toast.info("No matching data found");
+  //     } else {
+  //       console.log(responseData?.properties, "result");
+  //       setData(responseData.properties);
+  //     }
+  //   } catch (error) {
+  //     toast.error(error.message);
+  //   }
+  // };
 
   
   const columns = [
@@ -196,7 +196,7 @@ const Home = () => {
     },
     {
       name: "Image",
-      selector: (row) => <img src={row["image"]} alt="photo"/>,
+      selector: (row) => <img src={row["image"]} alt="missing"/>,
     },
     {
       name: <strong>Property</strong>,
