@@ -61,7 +61,7 @@ const Signup = () => {
         }
       } else {
         const data = await response.json();
-        toast.error(`Signup failed: ${data.error}`);
+        toast.error(`Signup failed: ${data.message}`);
       }
     } catch (error) {
       toast.error(`Error: ${error.message}`);
