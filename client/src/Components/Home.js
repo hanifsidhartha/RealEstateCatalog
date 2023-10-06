@@ -186,9 +186,9 @@ const Home = () => {
     } catch (error) {
       toast.error(error.message);
     }
-
-
   };
+
+  
   const columns = [
     {
       name: <strong>PPD ID</strong>,
@@ -196,7 +196,7 @@ const Home = () => {
     },
     {
       name: "Image",
-      selector: (row) => row["image"],
+      selector: (row) => <img src={row["image"]} alt="photo"/>,
     },
     {
       name: <strong>Property</strong>,

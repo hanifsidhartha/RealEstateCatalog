@@ -66,6 +66,8 @@ router.post("/add-property", async (req, res) => {
 
       const req_obj = req.body;
       req_obj.views = 0;
+      req_obj.status = Math.random() < 0.5 ? "sold" : "unsold"; // Randomly choose sold or active
+      req_obj.days_left = Math.floor(Math.random() * 30) + 1; // Random number between 1 and 30
 
       const collection = db.collection("real_estate_properties");
 
@@ -165,21 +167,17 @@ router.post("/list-properties", verifyToken, async (req, res) => {
     const docs = await collection.find({}).toArray();
     console.log("Found the following documents:");
     console.log(docs);
-    const resp_arr = [];
-    for (let index = 0; index < docs.length; index++) {
-      const element = docs[index];
-      const resp_obj = {
-        ppp_id: element._id,
-        image: element.photo,
-        property_type: element.propertyType,
-        contact: element.mobile,
-        area: element.area,
-        views: element.views,
-        status: "active",
-        days_left: "20",
-      };
-      resp_arr.push(resp_obj);
-    }
+    const resp_arr = docs.map((element) => ({
+      ppp_id: element._id,
+      image: element.photo,
+      property_type: element.propertyType,
+      contact: element.mobile,
+      area: element.area,
+      views: element.views,
+      status: element.status, // Retrieve the status from the database
+      days_left: element.days_left, // Retrieve days_left from the database
+    }));
+
     return res.status(200).json(gen_res(200, "Success", resp_arr));
   } catch (err) {
     console.error("Error finding documents:", err);

@@ -60,7 +60,7 @@ const ViewsDatabasic = () => {
           </div>
         </div>
         <div className="nav-links">
-          <NavLink to="/layout/viewsdatabasic">BasicInfo</NavLink>
+          <NavLink to="/layout/viewsdatabasic" state={viewData}>BasicInfo</NavLink>
           <NavLink to="/layout/viewsdataproperty" state={viewData}>Property Details</NavLink>
           <NavLink to="/layout/viewsdatageneral" state={viewData}>General Info</NavLink>
           <NavLink to="/layout/viewsdatalocation" state={viewData}>Location Info</NavLink>
