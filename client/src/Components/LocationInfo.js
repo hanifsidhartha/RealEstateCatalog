@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import ProgressSteps from "../Components/ProgressSteps";
 
-export default function LocationInfo({isEdit}) {
+export default function LocationInfo({ isEdit }) {
   const location = useLocation();
   const viewData = location.state;
 
@@ -16,11 +16,11 @@ export default function LocationInfo({isEdit}) {
     email: viewData?.email || "",
     city: viewData?.city || "",
     area: viewData?.area || "",
-    pincode:viewData?.pincode ||  "",
-    address:viewData?.address ||  "",
-    landmark:viewData?.landmark ||  "",
-    latitude:viewData?.latitude ||  "",
-    longitude:viewData?.longitude ||  "",
+    pincode: viewData?.pincode || "",
+    address: viewData?.address || "",
+    landmark: viewData?.landmark || "",
+    latitude: viewData?.latitude || "",
+    longitude: viewData?.longitude || "",
   });
 
   const { ppd_id } = useParams();
@@ -38,18 +38,23 @@ export default function LocationInfo({isEdit}) {
         ...propertyDetails,
         ...generalInfo,
         ...formData,
-        ...(isEdit ?{property_id:ppd_id}:"")
+        ...(isEdit ? { property_id: ppd_id } : ""),
       };
       console.log("Request Data:", wholeData); // Log the request data
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:5001/${isEdit ? "edit-property":"add-property"}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // Include the authorization token
-        },
-        body: JSON.stringify(wholeData),
-      });
+      const response = await fetch(
+        `https://real-estate-catalog-u050.onrender.com/${
+          isEdit ? "edit-property" : "add-property"
+        }`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // Include the authorization token
+          },
+          body: JSON.stringify(wholeData),
+        }
+      );
       if (!response.ok) {
         console.error(
           "Network response was not ok:",
@@ -231,7 +236,10 @@ export default function LocationInfo({isEdit}) {
         </div>
         <div className="form-buttons">
           <button onClick={handleCancel}>Previous</button>
-          <button onClick={handleSave}> {isEdit ? "Save Property" : "Add Property"}</button>
+          <button onClick={handleSave}>
+            {" "}
+            {isEdit ? "Save Property" : "Add Property"}
+          </button>
         </div>
       </div>
     </div>
