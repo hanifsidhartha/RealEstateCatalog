@@ -24,11 +24,7 @@ console.log("asdf");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(
-  cors({
-    origin: "http://localhost:3000",
-  })
-);
+app.use(cors());
 
 // Middleware to pass the db variable
 app.use((req, res, next) => {

@@ -5,7 +5,6 @@ import "../styles/Home.css";
 import { toast } from "react-toastify";
 import DataTable from "react-data-table-component";
 
-
 const Home = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
@@ -30,7 +29,7 @@ const Home = () => {
 
         const response = await fetch(
           // Make a GET request using the fetch API
-          "http://localhost:5001/list-properties",
+          "https://real-estate-catalog-u050.onrender.com/list-properties",
           requestOptions
         );
         if (!response.ok) {
@@ -46,10 +45,10 @@ const Home = () => {
         });
         const dataWithPpdIds = responseData.data.map((item, index) => ({
           ...item,
-          ppdId: generatedPpdIds[index],  // Add ppdId property to each item
+          ppdId: generatedPpdIds[index], // Add ppdId property to each item
         }));
-        setData({ ...responseData, data: dataWithPpdIds });  
-        setOriginalData({ ...responseData, data: dataWithPpdIds });  
+        setData({ ...responseData, data: dataWithPpdIds });
+        setOriginalData({ ...responseData, data: dataWithPpdIds });
         setPpdIds(generatedPpdIds);
       } catch (error) {
         toast.error(error.message);
@@ -59,7 +58,7 @@ const Home = () => {
   }, [token]);
 
   const handleViews = async (id, isEdit) => {
-    const payload = {property_id: id}
+    const payload = { property_id: id };
     try {
       const requestOptions = {
         method: "POST",
@@ -67,10 +66,10 @@ const Home = () => {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       };
       const response = await fetch(
-        `http://localhost:5001/view-property/`,
+        `https://real-estate-catalog-u050.onrender.com/view-property`,
         requestOptions
       );
 
@@ -80,14 +79,16 @@ const Home = () => {
 
       const responseData = await response.json();
 
-      console.log(responseData,"*****************");
+      console.log(responseData, "*****************");
 
-      
       if (responseData.code === 200) {
         // const propertyData = responseData.property;
-        localStorage.setItem("propertyData",responseData?.data)
+        localStorage.setItem("propertyData", responseData?.data);
         // Redirect to the ViewsDatabasic route and pass the property data as props
-        navigate(isEdit ? `/layout/basicinfo/edit/${id}` : "/layout/viewsdatabasic", { state: responseData?.data });
+        navigate(
+          isEdit ? `/layout/basicinfo/edit/${id}` : "/layout/viewsdatabasic",
+          { state: responseData?.data }
+        );
       } else {
         toast.info("No matching data found");
       }
@@ -121,7 +122,6 @@ const Home = () => {
 
   //     console.log(responseData,"*****************");
 
-      
   //     if (responseData.code === 200) {
   //       // const propertyData = responseData.property;
   //       localStorage.setItem("propertyData",responseData?.data)
@@ -139,19 +139,27 @@ const Home = () => {
   //   // navigate(`/layout/basicinfo/edit/${id}`);
   // };
 
-  const handleSearchInput = (e) =>{
-
+  const handleSearchInput = (e) => {
     setSearchQuery(e);
-    if(e && data?.data?.length){
+    if (e && data?.data?.length) {
       const origData = [...data?.data];
-      const filteredData = origData.filter(res => res.ppdId.toLocaleLowerCase().includes(e.toLocaleLowerCase()))
-      console.log(e,"-----------------", data?.data, origData,"***",filteredData);
+      const filteredData = origData.filter((res) =>
+        res.ppdId.toLocaleLowerCase().includes(e.toLocaleLowerCase())
+      );
+      console.log(
+        e,
+        "-----------------",
+        data?.data,
+        origData,
+        "***",
+        filteredData
+      );
       // console.log("filtereddddd data", filteredData);
-      setData({data:filteredData});
-    }else{
-      setData(originalData)
+      setData({ data: filteredData });
+    } else {
+      setData(originalData);
     }
-  }
+  };
 
   // const handleSearch = async () => {
   //   if (!searchQuery) {
@@ -188,7 +196,6 @@ const Home = () => {
   //   }
   // };
 
-  
   const columns = [
     {
       name: <strong>PPD ID</strong>,
@@ -196,7 +203,7 @@ const Home = () => {
     },
     {
       name: "Image",
-      selector: (row) => <img src={row["image"]} alt="missing"/>,
+      selector: (row) => <img src={row["image"]} alt="missing" />,
     },
     {
       name: <strong>Property</strong>,
@@ -227,10 +234,16 @@ const Home = () => {
       selector: (row) => (
         <>
           <div>
-            <div className="action-button" onClick={() => handleViews(row.ppp_id)}>
+            <div
+              className="action-button"
+              onClick={() => handleViews(row.ppp_id)}
+            >
               <img src={ImgUrl?.Views} alt="pic missing" />
             </div>
-            <div className="action-button" onClick={() => handleViews(row?.ppp_id, true)}>
+            <div
+              className="action-button"
+              onClick={() => handleViews(row?.ppp_id, true)}
+            >
               <img src={ImgUrl.Edit} alt="pic missing" />
             </div>
           </div>
@@ -303,8 +316,8 @@ const Home = () => {
           </div>
         ))} */}
       </div>
-      {console.log(data?.data,"==============")}
-      <DataTable columns={columns} data={data?.data} pagination  />
+      {console.log(data?.data, "==============")}
+      <DataTable columns={columns} data={data?.data} pagination />
     </>
   );
 };

@@ -38,13 +38,16 @@ const Signup = () => {
 
     try {
       // const hashedPassword = await bcrypt.hash(password, 10);
-      const response = await fetch("http://localhost:5001/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name, email, password }),
-      });
+      const response = await fetch(
+        "https://real-estate-catalog-u050.onrender.com/signup",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name, email, password }),
+        }
+      );
 
       if (response.ok) {
         const data = await response.json();

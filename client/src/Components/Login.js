@@ -30,13 +30,16 @@ const Login = () => {
         password: password,
       };
 
-      const response = await fetch("http://localhost:5001/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(req_body),
-      });
+      const response = await fetch(
+        "https://real-estate-catalog-u050.onrender.com/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(req_body),
+        }
+      );
 
       if (response.ok) {
         const response_data = await response.json();
@@ -93,6 +96,5 @@ const Login = () => {
     </div>
   );
 };
-
 
 export default Login;
