@@ -52,10 +52,10 @@ export default function GeneraInfo({isEdit}) {
     navigate("/layout/property-detail");
   };
 
-  const handleImageClick = () => {
-    const fileInput = document.getElementById("addPhoto"); // Trigger the file input when the image is clicked
-    fileInput.click();
-  };
+  // const handleImageClick = () => {
+  //   const fileInput = document.getElementById("addPhoto"); // Trigger the file input when the image is clicked
+  //   fileInput.click();
+  // };
 
   return (
     <div className="propert">
