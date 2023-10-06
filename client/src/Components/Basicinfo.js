@@ -58,7 +58,7 @@ const PropertyForm = ({isEdit}) => {
               <option value="">Select Property Type</option>
               <option value="Apartment">Apartment</option>
               <option value="House">House</option>
-              <option value="Condo">Villa</option>
+              <option value="villa">Villa</option>
             </select>
 
             <label htmlFor="price">Price</label>
