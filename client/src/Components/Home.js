@@ -108,14 +108,6 @@ const Home = () => {
       const filteredData = origData.filter((res) =>
         res.ppdId.toLocaleLowerCase().includes(e.toLocaleLowerCase())
       );
-      console.log(
-        e,
-        "-----------------",
-        data?.data,
-        origData,
-        "***",
-        filteredData
-      );
       setData({ data: filteredData });
     } else {
       setData(originalData);
