@@ -4,6 +4,8 @@ import ImgUrl from "../assets/images/ImgUrl";
 import "../styles/Home.css";
 import { toast } from "react-toastify";
 import DataTable from "react-data-table-component";
+import Modal from 'react-modal'; // Import the Modal component
+
 
 const Home = () => {
   const navigate = useNavigate();
@@ -12,6 +14,9 @@ const Home = () => {
   console.log(data?.data, "data");
   const [searchQuery, setSearchQuery] = useState(""); // State for search query
   const [ppdIds, setPpdIds] = useState([]);
+  const [isImageModalOpen, setImageModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState('');
+
 
   const token = localStorage.getItem("token");
   const ppdCounter = useRef(1101);
@@ -161,6 +166,7 @@ const Home = () => {
     }
   };
 
+
   // const handleSearch = async () => {
   //   if (!searchQuery) {
   //     toast.error("Please enter a search query");
@@ -195,6 +201,31 @@ const Home = () => {
   //     toast.error(error.message);
   //   }
   // };
+  const openImageModal = (imageUrl) => {
+    setSelectedImage(imageUrl);
+    setImageModalOpen(true);
+  };
+
+  const closeImageModal = () => {
+    setImageModalOpen(false);
+  };
+
+  const modalStyle = {
+    content: {
+      width: '300px',
+      height: '400px',
+      margin: 'auto',
+      backgroundColor: 'white',
+      border: '1px solid #ccc',
+      borderRadius: '10px', // Adjust the border radius as needed
+      outline: 'none',
+      padding: '20px',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center', // Center the image vertically
+    },
+  };
 
   const columns = [
     {
@@ -202,9 +233,14 @@ const Home = () => {
       selector: (row) => row.ppdId,
     },
     {
-      name: "Image",
-      selector: (row) => <img src={row["image"]} alt="missing" />,
+      name: 'Image',
+      selector: (row) => (
+        <div onClick={() => openImageModal(row['image'])}>
+          <img src={row['image']} alt="missing" style={{ cursor: 'pointer' }} />
+        </div>
+      ),
     },
+
     {
       name: <strong>Property</strong>,
       selector: (row) => row.property_type,
@@ -318,6 +354,17 @@ const Home = () => {
       </div>
       {console.log(data?.data, "==============")}
       <DataTable columns={columns} data={data?.data} pagination />
+      <Modal
+          isOpen={isImageModalOpen}
+          onRequestClose={closeImageModal}
+          contentLabel="Image Popup"
+          style={modalStyle}
+        >
+          {selectedImage && (
+            <img src={selectedImage} alt="popup" style={{ width: '100%', height: '100%' }} />
+          )}
+          <button onClick={closeImageModal}>Close</button>
+        </Modal>
     </>
   );
 };
