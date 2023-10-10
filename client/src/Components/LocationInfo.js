@@ -43,8 +43,7 @@ export default function LocationInfo({ isEdit }) {
       console.log("Request Data:", wholeData); // Log the request data
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `https://real-estate-catalog-u050.onrender.com/${
-          isEdit ? "edit-property" : "add-property"
+        `https://real-estate-catalog-u050.onrender.com/${isEdit ? "edit-property" : "add-property"
         }`,
         {
           method: "POST",
@@ -151,31 +150,32 @@ export default function LocationInfo({ isEdit }) {
               onChange={handleChange}
             >
               <option value="">Select City</option>
-              <option value="City1">Hyderabad</option>
-              <option value="City2">Bangalore</option>
-              <option value="City3">Chennai</option>
-              <option value="City4">Delhi</option>
-              <option value="City5">Mumbai</option>
-              <option value="City6">Kurnool</option>
-              <option value="City7">Kolkata</option>
-              <option value="City8">Pune</option>
-              <option value="City9">Jaipur</option>
-              <option value="City10">Ahmedabad</option>
-              <option value="City11">Lucknow</option>
-              <option value="City12">Chandigarh</option>
-              <option value="City13">Bhopal</option>
-              <option value="City14">Coimbatore</option>
-              <option value="City15">Indore</option>
-              <option value="City16">Kochi</option>
-              <option value="City17">Visakhapatnam</option>
-              <option value="City18">Surat</option>
-              <option value="City19">Nagpur</option>
-              <option value="City20">Amritsar</option>
-              <option value="City21">Bhubaneswar</option>
-              <option value="City22">Patna</option>
-              <option value="City23">Dehradun</option>
-              <option value="City24">Ranchi</option>
-              <option value="City25">Guwahati</option>
+              <option value="Hyderabad">Hyderabad</option>
+              <option value="Bangalore">Bangalore</option>
+              <option value="Chennai">Chennai</option>
+              <option value="Delhi">Delhi</option>
+              <option value="Mumbai">Mumbai</option>
+              <option value="Kurnool">Kurnool</option>
+              <option value="Kolkata">Kolkata</option>
+              <option value="Pune">Pune</option>
+              <option value="Jaipur">Jaipur</option>
+              <option value="Ahmedabad">Ahmedabad</option>
+              <option value="Lucknow">Lucknow</option>
+              <option value="Chandigarh">Chandigarh</option>
+              <option value="Bhopal">Bhopal</option>
+              <option value="Coimbatore">Coimbatore</option>
+              <option value="Indore">Indore</option>
+              <option value="Kochi">Kochi</option>
+              <option value="Visakhapatnam">Visakhapatnam</option>
+              <option value="Surat">Surat</option>
+              <option value="Nagpur">Nagpur</option>
+              <option value="Amritsar">Amritsar</option>
+              <option value="Bhubaneswar">Bhubaneswar</option>
+              <option value="Patna">Patna</option>
+              <option value="Dehradun">Dehradun</option>
+              <option value="Ranchi">Ranchi</option>
+              <option value="Guwahati">Guwahati</option>
+
             </select>
 
             <label htmlFor="pincode">Pincode</label>

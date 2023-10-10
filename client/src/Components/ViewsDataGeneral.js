@@ -1,12 +1,43 @@
-import React from "react";
+import React , {useState} from "react";
 import { NavLink, useLocation} from "react-router-dom"; // Import NavLink
 import "../styles/ViewsData.css";
+import Modal from "react-modal"; // Import Modal
+
 
 const ViewsDataGeneral = () => {
 
   const location = useLocation();
 
   const viewData = location.state;
+  const [isImageModalOpen, setImageModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState("");
+  const openImageModal = (imageUrl) => {
+    setSelectedImage(imageUrl);
+    setImageModalOpen(true);
+  };
+
+  const closeImageModal = () => {
+    setImageModalOpen(false);
+  };
+
+  const modalStyle = {
+    content: {
+      width: "300px",
+      height: "400px",
+      margin: "auto",
+      backgroundColor: "white",
+      border: "1px solid #ccc",
+      borderRadius: "10px", // Adjust the border radius as needed
+      outline: "none",
+      padding: "20px",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center", // Center the image vertically
+    },
+  };
+
+
 
   return (
     <>
@@ -27,11 +58,11 @@ const ViewsDataGeneral = () => {
               <input value={viewData?.featuredPackage}/>
             </div>
             <div className="View-form-row">
-              <div className="imge">
+              <div className="imge" onClick={() => openImageModal(viewData?.photo)}>
                 <label htmlFor="addPhoto">Picture</label>
-                {/* <input value={viewData?.photo}/> */}
-                <img src={`${viewData?.photo}`} alt="missing"/>
+                <img src={`${viewData?.photo}`} alt="missing" />
               </div>
+
             </div>
           </div>
           <div className="form-section">
@@ -56,6 +87,18 @@ const ViewsDataGeneral = () => {
           <NavLink to="/layout/viewsdatalocation" state={viewData}>Location Info</NavLink>
         </div>
       </div>
+      <Modal
+        isOpen={isImageModalOpen}
+        onRequestClose={closeImageModal}
+        contentLabel="Image Popup"
+        style={modalStyle}
+      >
+        {selectedImage && (
+          <img src={selectedImage} alt="popup" style={{ width: '100%', height: '100%' }} />
+        )}
+        <button onClick={closeImageModal}>Close</button>
+      </Modal>
+
     </>
   );
 };
