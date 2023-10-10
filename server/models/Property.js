@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const requiredString = {
   type: String,
-  required: true, // Adding this line to make the field required
+  required: true, 
 };
 
 const optionalString = {

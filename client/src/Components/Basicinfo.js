@@ -27,10 +27,6 @@ const PropertyForm = ({isEdit}) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-  // console.log(formData);
-
-  // useEffect(() => {
-  // }, [formData]);
 
   const handleSave = () => {
     localStorage.setItem("basicInfo", JSON.stringify(formData));
@@ -163,5 +159,4 @@ const PropertyForm = ({isEdit}) => {
     </div>
   );
 };
-
 export default PropertyForm;

@@ -66,9 +66,8 @@ router.post("/add-property", async (req, res) => {
 
       const req_obj = req.body;
       req_obj.views = 0;
-      req_obj.status = Math.random() < 0.5 ? "sold" : "unsold"; // Randomly choose sold or active
-      req_obj.days_left = Math.floor(Math.random() * 30) + 1; // Random number between 1 and 30
-
+      req_obj.status = Math.random() < 0.5 ? "sold" : "unsold"; 
+      req_obj.days_left = Math.floor(Math.random() * 30) + 1; 
       const collection = db.collection("real_estate_properties");
 
       try {
@@ -136,12 +135,10 @@ router.post("/edit-property", async (req, res) => {
 
         // Check if the document was found and updated
         if (result.value) {
-          console.log("Updated document:", result.value);
           return res
             .status(200)
             .json({ message: "Success - Updated Document" });
         } else {
-          console.log("Document not found", result);
           return res.status(200).json({ message: "Document not found" });
         }
       } catch (err) {
@@ -165,8 +162,7 @@ router.post("/list-properties", verifyToken, async (req, res) => {
   try {
     const collection = db.collection("real_estate_properties");
     const docs = await collection.find({}).toArray();
-    console.log("Found the following documents:");
-    console.log(docs);
+    
     const resp_arr = docs.map((element) => ({
       ppp_id: element._id,
       image: element.photo,
@@ -201,7 +197,6 @@ router.delete("/delete-property", async (req, res) => {
     const token = authHeader.split(" ")[1]; // Assuming it's a Bearer token
     try {
       const decoded = jwt.verify(token, JWT_SECRET);
-      console.log("Decoded JWT payload:", decoded);
       const user = await db
         .collection("users")
         .findOne({ email: decoded.email });
@@ -248,7 +243,6 @@ router.post("/view-property", async (req, res) => {
     const token = authHeader.split(" ")[1]; // Assuming it's a Bearer token
     try {
       const decoded = jwt.verify(token, JWT_SECRET);
-      console.log("Decoded JWT payload:", decoded);
       const user = await db
         .collection("users")
         .findOne({ email: decoded.email });
@@ -265,7 +259,6 @@ router.post("/view-property", async (req, res) => {
           _id: new ObjectId(property_id),
         });
 
-        console.log("asdf", "result_1", property_id);
 
         if (result) {
           return res.status(200).json(gen_res(200, "Success", result));

@@ -18,7 +18,6 @@ const ParentForm = () => {
     propertyApproved: "",
     propertyDescription: "",
     bankLoan: "",
-    // Add additional fields as needed
     length: "",
     breath: "",
     totalArea: "",
@@ -54,7 +53,7 @@ const ParentForm = () => {
   const navigate = useNavigate();
 
   const handleDataChange = (data) => {
-    setFormData({ ...formData, ...data }); // Merge the data received from child components into the formData state
+    setFormData({ ...formData, ...data }); 
   };
 
   const handleSave = () => {
@@ -79,7 +78,6 @@ const ParentForm = () => {
           return response.json();
         })
         .then((data) => {
-          console.log("Property saved:", data);
           alert("Property saved successfully!");
           navigate("/layout/property-detail");
         })

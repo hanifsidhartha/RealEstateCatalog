@@ -40,7 +40,6 @@ export default function LocationInfo({ isEdit }) {
         ...formData,
         ...(isEdit ? { property_id: ppd_id } : ""),
       };
-      console.log("Request Data:", wholeData); // Log the request data
       const token = localStorage.getItem("token");
       const response = await fetch(
         `https://real-estate-catalog-u050.onrender.com/${isEdit ? "edit-property" : "add-property"
@@ -63,14 +62,11 @@ export default function LocationInfo({ isEdit }) {
         throw new Error("Network response was not ok");
       }
       const response_data = await response.json();
-      console.log("Response from server:", response_data);
 
       if (response_data.code === 200) {
-        console.log("Navigating to /layout/home...");
         // toast.success(response_data.message);
         navigate("/layout/home");
       } else {
-        console.log("Navigating to /layout/basicinfo...");
         // toast.error(response_data.message);
         navigate("/layout/home");
       }

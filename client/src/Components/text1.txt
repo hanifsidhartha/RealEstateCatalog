@@ -1,8 +1,0 @@
-  ownerName: String,
-  postedBy: String,
-  featuredPackage: String,
-  mobileNumber: String,
-  saleType: String,
-  ppdPackage: String,
-  image: String,
-  price: String,
