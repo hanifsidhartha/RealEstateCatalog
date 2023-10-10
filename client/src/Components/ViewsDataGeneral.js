@@ -1,7 +1,7 @@
 import React , {useState} from "react";
-import { NavLink, useLocation} from "react-router-dom"; // Import NavLink
+import { NavLink, useLocation} from "react-router-dom";
 import "../styles/ViewsData.css";
-import Modal from "react-modal"; // Import Modal
+import Modal from "react-modal"; 
 
 
 const ViewsDataGeneral = () => {
@@ -27,13 +27,13 @@ const ViewsDataGeneral = () => {
       margin: "auto",
       backgroundColor: "white",
       border: "1px solid #ccc",
-      borderRadius: "10px", // Adjust the border radius as needed
+      borderRadius: "10px", 
       outline: "none",
       padding: "20px",
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
-      justifyContent: "center", // Center the image vertically
+      justifyContent: "center", 
     },
   };
 

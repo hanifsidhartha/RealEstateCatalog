@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, useLocation } from "react-router-dom"; // Import NavLink
+import { NavLink, useLocation } from "react-router-dom"; 
 import "../styles/ViewsData.css";
 
 const ViewsDataProperty = () => {

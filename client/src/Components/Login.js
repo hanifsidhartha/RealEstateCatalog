@@ -43,7 +43,7 @@ const Login = () => {
 
       if (response.ok) {
         const response_data = await response.json();
-        console.log(response_data);
+      
         if (response_data.code === 200) {
           localStorage.setItem("token", response_data.data.token);
           localStorage.setItem("name", response_data.data.name);

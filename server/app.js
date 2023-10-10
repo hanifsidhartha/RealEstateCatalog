@@ -20,7 +20,6 @@ const db = mongoose
   })
   .catch((err) => console.error(err));
 
-console.log("asdf");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

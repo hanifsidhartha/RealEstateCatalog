@@ -30,11 +30,11 @@ export default function PropertyDetails({isEdit}) {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    // console.log(formData);
+   
   };
 
   useEffect(() => {
-    console.log(formData);
+    // console.log(formData);
   }, [formData]);
 
   const navigate = useNavigate();

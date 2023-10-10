@@ -4,15 +4,14 @@ import ImgUrl from "../assets/images/ImgUrl";
 import "../styles/Home.css";
 import { toast } from "react-toastify";
 import DataTable from "react-data-table-component";
-import Modal from 'react-modal'; // Import the Modal component
+import Modal from 'react-modal';
 
 
 const Home = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [originalData, setOriginalData] = useState([]);
-  console.log(data?.data, "data");
-  const [searchQuery, setSearchQuery] = useState(""); // State for search query
+  const [searchQuery, setSearchQuery] = useState("");
   const [ppdIds, setPpdIds] = useState([]);
   const [isImageModalOpen, setImageModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState('');
@@ -84,8 +83,6 @@ const Home = () => {
 
       const responseData = await response.json();
 
-      console.log(responseData, "*****************");
-
       if (responseData.code === 200) {
         // const propertyData = responseData.property;
         localStorage.setItem("propertyData", responseData?.data);
@@ -102,47 +99,7 @@ const Home = () => {
     }
   };
 
-  // const handleEditData = (id) => {
 
-  //   const payload = {property_id: id}
-  //   try {
-  //     const requestOptions = {
-  //       method: "POST",
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(payload)
-  //     };
-  //     const response = await fetch(
-  //       `http://localhost:5001/view-property/`,
-  //       requestOptions
-  //     );
-
-  //     if (!response.ok) {
-  //       throw new Error("Network response was not ok");
-  //     }
-
-  //     const responseData = await response.json();
-
-  //     console.log(responseData,"*****************");
-
-  //     if (responseData.code === 200) {
-  //       // const propertyData = responseData.property;
-  //       localStorage.setItem("propertyData",responseData?.data)
-  //       // Redirect to the ViewsDatabasic route and pass the property data as props
-  //       navigate("/layout/viewsdatabasic", { state: responseData?.data });
-  //       navigate(`/layout/basicinfo/edit/${id}`);
-
-  //     } else {
-  //       toast.info("No matching data found");
-  //     }
-  //   } catch (error) {
-  //     toast.error(error.message);
-  //   }
-  //   // console.log(id , "if");
-  //   // navigate(`/layout/basicinfo/edit/${id}`);
-  // };
 
   const handleSearchInput = (e) => {
     setSearchQuery(e);
@@ -159,7 +116,6 @@ const Home = () => {
         "***",
         filteredData
       );
-      // console.log("filtereddddd data", filteredData);
       setData({ data: filteredData });
     } else {
       setData(originalData);
@@ -167,40 +123,7 @@ const Home = () => {
   };
 
 
-  // const handleSearch = async () => {
-  //   if (!searchQuery) {
-  //     toast.error("Please enter a search query");
-  //     return;
-  //   }
-  //   try {
-  //     const requestOptions = {
-  //       method: "POST",
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ ppdId: searchQuery }),
-  //     };
-  //     const response = await fetch(
-  //       "http://localhost:5001/search-by-ppdId",
-  //       requestOptions
-  //     );
 
-  //     if (!response.ok) {
-  //       throw new Error("Network response was not ok");
-  //     }
-
-  //     const responseData = await response.json();
-  //     if (responseData.properties.length === 0) {
-  //       toast.info("No matching data found");
-  //     } else {
-  //       console.log(responseData?.properties, "result");
-  //       setData(responseData.properties);
-  //     }
-  //   } catch (error) {
-  //     toast.error(error.message);
-  //   }
-  // };
   const openImageModal = (imageUrl) => {
     setSelectedImage(imageUrl);
     setImageModalOpen(true);
@@ -217,13 +140,13 @@ const Home = () => {
       margin: 'auto',
       backgroundColor: 'white',
       border: '1px solid #ccc',
-      borderRadius: '10px', // Adjust the border radius as needed
+      borderRadius: '10px',
       outline: 'none',
       padding: '20px',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      justifyContent: 'center', // Center the image vertically
+      justifyContent: 'center',
     },
   };
 
@@ -303,7 +226,6 @@ const Home = () => {
               src={ImgUrl.Search}
               alt="Search icon"
               className="search-icon"
-              // onClick={handleSearch}
             />
           </div>
           <div>
@@ -316,55 +238,19 @@ const Home = () => {
           </div>
         </div>
 
-        {/* <div className="home-02">
-          <div className="heading">PPD ID</div>
-          <div className="heading">Image</div>
-          <div className="heading">Property</div>
-          <div className="heading">Contact</div>
-          <div className="heading">Area</div>
-          <div className="heading">Views</div>
-          <div className="heading">Status</div>
-          <div className="heading">Days Left</div>
-          <div className="heading">Action</div>
-        </div> */}
-        {/* 
-        {data?.data?.map((data, index) => (
-          <div key={index} className="home-02">
-            <div>{ppdIds[index]}</div>
-            <div>{data.image}</div>
-            <div>{data.property_type}</div>
-            <div>{data.contact}</div>
-            <div>{data.area}</div>
-            <div>{data.views}</div>
-            <div>{data.status}</div>
-            <div>{data.days_left}</div>
-            <div>
-              <div className="action-button" onClick={() => handleViews()}>
-                <img src={ImgUrl?.Views} alt="pic missing" />
-              </div>
-              <div
-                className="action-button"
-                onClick={() => handleEditData(index)}
-              >
-                <img src={ImgUrl.Edit} alt="pic missing" />
-              </div>
-            </div>
-          </div>
-        ))} */}
       </div>
-      {console.log(data?.data, "==============")}
       <DataTable columns={columns} data={data?.data} pagination />
       <Modal
-          isOpen={isImageModalOpen}
-          onRequestClose={closeImageModal}
-          contentLabel="Image Popup"
-          style={modalStyle}
-        >
-          {selectedImage && (
-            <img src={selectedImage} alt="popup" style={{ width: '100%', height: '100%' }} />
-          )}
-          <button onClick={closeImageModal}>Close</button>
-        </Modal>
+        isOpen={isImageModalOpen}
+        onRequestClose={closeImageModal}
+        contentLabel="Image Popup"
+        style={modalStyle}
+      >
+        {selectedImage && (
+          <img src={selectedImage} alt="popup" style={{ width: '100%', height: '100%' }} />
+        )}
+        <button onClick={closeImageModal}>Close</button>
+      </Modal>
     </>
   );
 };

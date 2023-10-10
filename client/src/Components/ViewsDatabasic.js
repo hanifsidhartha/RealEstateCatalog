@@ -7,8 +7,6 @@ const ViewsDatabasic = () => {
   const location = useLocation();
 
   const viewData = location.state;
-
-  console.log(viewData,"stateeee");
   return (
     <>
       <h1>Property Details</h1>

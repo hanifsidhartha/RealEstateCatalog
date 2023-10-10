@@ -20,11 +20,7 @@ export default function GeneraInfo({isEdit}) {
     ppdPackage:viewData?.ppdPackage ||  "",
     photo: viewData?.photo || "",
   });
-  console.log(formData, "formDta");
-
   const { ppd_id } = useParams();
-
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -32,7 +28,6 @@ export default function GeneraInfo({isEdit}) {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    console.log(file, "file");
     setFileName(file?.name)
     var reader = new FileReader();
     reader.readAsDataURL(file);
@@ -51,11 +46,6 @@ export default function GeneraInfo({isEdit}) {
   const handleCancel = () => {
     navigate("/layout/property-detail");
   };
-
-  // const handleImageClick = () => {
-  //   const fileInput = document.getElementById("addPhoto"); // Trigger the file input when the image is clicked
-  //   fileInput.click();
-  // };
 
   return (
     <div className="propert">
