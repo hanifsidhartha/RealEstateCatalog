@@ -1,3 +1,5 @@
+
+
 body {
   background-color: #e1f9f4;
 }
@@ -11,7 +13,16 @@ body {
   margin: 20px;
 }
 .part-02 input::placeholder {
-  padding-left: 20px;
+ 
   font-size: 14px;
   color: #999;
+}
+@media (max-width: 480px) {
+  .ps {
+    padding: 10px;
+    margin: 10px;
+  }
+  .part-02 input::placeholder {
+    font-size: 10px;
+  }
 }

@@ -1,7 +1,7 @@
-import React , {useState} from "react";
-import { NavLink, useLocation} from "react-router-dom";
+import React, { useState } from "react";
+import { NavLink, useLocation } from "react-router-dom";
 import "../styles/ViewsData.css";
-import Modal from "react-modal"; 
+import Modal from "react-modal";
 
 
 const ViewsDataGeneral = () => {
@@ -22,18 +22,18 @@ const ViewsDataGeneral = () => {
 
   const modalStyle = {
     content: {
-      width: "300px",
-      height: "400px",
+      width: "500px",
+      height: "500px",
       margin: "auto",
       backgroundColor: "white",
       border: "1px solid #ccc",
-      borderRadius: "10px", 
+      borderRadius: "10px",
       outline: "none",
       padding: "20px",
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
-      justifyContent: "center", 
+      justifyContent: "center",
     },
   };
 
@@ -47,15 +47,15 @@ const ViewsDataGeneral = () => {
           <div className="form-section">
             <div className="View-form-row">
               <label htmlFor="name">Name</label>
-              <input value={viewData?.name}/>
+              <input value={viewData?.name} />
             </div>
             <div className="View-form-row">
               <label htmlFor="postedBy">Posted By</label>
-              <input value={viewData?.postedBy}/>
+              <input value={viewData?.postedBy} />
             </div>
             <div className="View-form-row">
               <label htmlFor="featuredPackage">Featured Package</label>
-              <input value={viewData?.featuredPackage}/>
+              <input value={viewData?.featuredPackage} />
             </div>
             <div className="View-form-row">
               <div className="imge" onClick={() => openImageModal(viewData?.photo)}>
@@ -68,15 +68,15 @@ const ViewsDataGeneral = () => {
           <div className="form-section">
             <div className="View-form-row">
               <label htmlFor="mobile">Mobile</label>
-              <input value={viewData?.mobile}/>
+              <input value={viewData?.mobile} />
             </div>
             <div className="View-form-row">
               <label htmlFor="saleType">Sale Type</label>
-              <input value={viewData?.saleType}/>
+              <input value={viewData?.saleType} />
             </div>
             <div className="View-form-row">
               <label htmlFor="ppdPackage">PPD Package</label>
-              <input value={viewData?.ppdPackage}/>
+              <input value={viewData?.ppdPackage} />
             </div>
           </div>
         </div>
@@ -94,9 +94,13 @@ const ViewsDataGeneral = () => {
         style={modalStyle}
       >
         {selectedImage && (
-          <img src={selectedImage} alt="popup" style={{ width: '100%', height: '100%' }} />
+          <img
+            src={selectedImage}
+            alt="popup"
+            style={{ width: '100%', height: '100%', cursor: 'pointer' }}
+            onClick={closeImageModal} // Close the modal when the image is clicked
+          />
         )}
-        <button onClick={closeImageModal}>Close</button>
       </Modal>
 
     </>

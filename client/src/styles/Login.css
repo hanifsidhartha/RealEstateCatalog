@@ -47,3 +47,38 @@ body {
   height: 40px;
   background-color: #a8afec;
 }
+
+@media (max-width: 768px) {
+  .main {
+    width: 350px;
+
+  }
+  
+  .part-02 input,
+  .part-02 button {
+    width: 100%; 
+    margin-top: 10px;
+  }
+}
+
+/* Media Query for Mobile Devices */
+@media (max-width: 480px) {
+  .main {
+    width: 300px;
+    padding: 10px;
+  }
+  
+  .part-01 h2 {
+    font-size: 28px; 
+  }
+  
+  .part-02 h6 {
+    font-size: 14px; 
+  }
+  
+  .part-02 input,
+  .part-02 button {
+    width: 100%;
+    margin-top: 10px;
+  }
+}

@@ -127,8 +127,8 @@ const Home = () => {
 
   const modalStyle = {
     content: {
-      width: '300px',
-      height: '400px',
+      width: '500px',
+      height: '500px',
       margin: 'auto',
       backgroundColor: 'white',
       border: '1px solid #ccc',
@@ -239,10 +239,15 @@ const Home = () => {
         style={modalStyle}
       >
         {selectedImage && (
-          <img src={selectedImage} alt="popup" style={{ width: '100%', height: '100%' }} />
+          <img
+            src={selectedImage}
+            alt="popup"
+            style={{ width: '100%', height: '100%', cursor: 'pointer' }}
+            onClick={closeImageModal}
+          />
         )}
-        <button onClick={closeImageModal}>Close</button>
       </Modal>
+
     </>
   );
 };

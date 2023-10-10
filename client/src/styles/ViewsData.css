@@ -41,3 +41,44 @@ h1 {
   margin: 50px;
   /* padding: ; */
 }
+
+
+@media (max-width: 960px) {
+  .View-form-row label {
+    width: 100% !important;
+  }
+}
+
+/* Media query for 768px screens and below */
+@media (max-width: 768px) {
+  .View-form-row label {
+    font-size: 12px;
+  }
+
+  .View-form-row select,
+  .View-form-row input {
+    font-size: 12px;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    margin: 20px;
+  }
+}
+
+/* Media query for 480px screens and below */
+@media (max-width: 480px) {
+  .View-form-row label {
+    font-size: 12px;
+  }
+
+  .View-form-row select,
+  .View-form-row input {
+    font-size: 12px;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    margin: 20px;
+  }
+}

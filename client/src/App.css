@@ -28,3 +28,13 @@ body {
   margin-top: 100px;
   padding: 2rem;
 }
+@media (max-width: 768px) {
+  .content {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .main-content {
+    margin-top: 20px;
+  }
+}

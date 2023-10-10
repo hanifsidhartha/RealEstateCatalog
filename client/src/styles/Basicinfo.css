@@ -80,3 +80,17 @@
   width: 60px;
   height: 60px;
 }
+@media (max-width: 768px) {
+  .property-form-view {
+    flex-direction: column; /* Stack sections vertically on smaller screens */
+  }
+
+  .form-section {
+    width: 100%; /* Make sections take up full width on smaller screens */
+  }
+
+  .form-buttons {
+    flex-direction: column; /* Stack buttons vertically on smaller screens */
+    align-items: center;
+  }
+}
