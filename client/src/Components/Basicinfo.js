@@ -159,5 +159,4 @@ const PropertyForm = ({isEdit}) => {
     </div>
   );
 };
-
 export default PropertyForm;
