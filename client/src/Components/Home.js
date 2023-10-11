@@ -12,6 +12,7 @@ const Home = () => {
   const [data, setData] = useState([]);
   const [originalData, setOriginalData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  // eslint-disable-next-line
   const [ppdIds, setPpdIds] = useState([]);
   const [isImageModalOpen, setImageModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState('');
@@ -195,7 +196,7 @@ const Home = () => {
               className="action-button"
               onClick={() => handleViews(row?.ppp_id, true)}
             >
-              <img src={ImgUrl.Edit} alt="pic missing" />
+              <img src={ImgUrl?.Edit} alt="pic missing" />
             </div>
           </div>
         </>
