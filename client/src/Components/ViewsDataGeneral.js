@@ -34,6 +34,7 @@ const ViewsDataGeneral = () => {
       flexDirection: "column",
       alignItems: "center",
       justifyContent: "center",
+      cursor:"pointer",
     },
   };
 
@@ -58,9 +59,9 @@ const ViewsDataGeneral = () => {
               <input value={viewData?.featuredPackage} />
             </div>
             <div className="View-form-row">
-              <div className="imge" onClick={() => openImageModal(viewData?.photo)}>
+              <div className="imge" onClick={() => openImageModal(viewData?.photo)} >
                 <label htmlFor="addPhoto">Picture</label>
-                <img src={`${viewData?.photo}`} alt="missing" />
+                <img src={`${viewData?.photo}`} alt="missing" style={{ cursor: 'pointer' }}/>
               </div>
 
             </div>
@@ -98,7 +99,7 @@ const ViewsDataGeneral = () => {
             src={selectedImage}
             alt="popup"
             style={{ width: '100%', height: '100%', cursor: 'pointer' }}
-            onClick={closeImageModal} // Close the modal when the image is clicked
+            onClick={closeImageModal} 
           />
         )}
       </Modal>
